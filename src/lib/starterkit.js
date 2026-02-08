@@ -116,7 +116,7 @@ const resolveStarterData = (data = {}) => {
   const derivedMaxTimeline = deriveMaxTimeline(projections)
 
   return {
-    sceneSrc: data.sceneSrc ?? './media/scene.gltf',
+    sceneSrc: data.sceneSrc ?? '',
     maxTimelineTime: toFiniteNumber(data.maxTimelineTime, derivedMaxTimeline),
     projections,
     cameraTracks,

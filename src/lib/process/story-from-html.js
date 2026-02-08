@@ -139,7 +139,7 @@ const extractRenderer = (doc) => {
   if (renderer) {
     return {
       renderer,
-      sceneSrc: asTrimmedString(renderer.getAttribute('scene')) || './media/scene.gltf'
+      sceneSrc: asTrimmedString(renderer.getAttribute('scene')) || ''
     }
   }
 
@@ -150,7 +150,7 @@ const extractRenderer = (doc) => {
 
   return {
     renderer: doc.body,
-    sceneSrc: './media/scene.gltf'
+    sceneSrc: ''
   }
 }
 
