@@ -6,8 +6,7 @@
   import data from '$lib/data'
   import { isVideoSource, resolveStarterData } from '$lib/starterkit'
 
-  // const storyPath = '/data/hermann/story.json'
-  const storyPath = '/data/g8/story.json'
+  const storyPath = '/data/g8/story.json' // path to exported story JSON from the Vantage Platform.
 
   let sourceData = $state(data)
   let starter = $derived(resolveStarterData(sourceData))
