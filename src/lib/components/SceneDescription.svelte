@@ -2,7 +2,8 @@
   let {
     visible = true,
     overviewMode = true,
-    introText = 'Choose a camera, follow the timeline, read the text.',
+    introText = '',
+    hasStoryContext = false,
     activeContext = null,
     emptyText = '',
     layout = 'overlay'
@@ -29,7 +30,9 @@
       : 'tiny-shadow text-base absolute bg-white left-2 right-2 top-2 z-20 max-w-[640px] rounded-[var(--radius)] border border-[var(--panel-stroke)] bg-[var(--panel-fill)]/90 px-3 py-1.5 text-slate-700'
   )
   let shouldRender = $derived(
-    visible && ((overviewMode && intro.length > 0) || (!overviewMode && (hasContext || empty.length > 0)))
+    visible &&
+      ((overviewMode && hasStoryContext && intro.length > 0) ||
+        (!overviewMode && (hasContext || empty.length > 0)))
   )
 </script>
 

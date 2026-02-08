@@ -97,8 +97,20 @@
 
     return false
   }
+  const projectionHasContext = (projection) => {
+    if (!projection || typeof projection !== 'object') return false
+    if (hasRenderableContext(projection.context)) return true
+
+    if (!Array.isArray(projection.keyframes)) return false
+    return projection.keyframes.some((keyframe) => hasRenderableContext(keyframe?.context))
+  }
+
+  let introText = $derived(normalizedText(ui?.context?.introText))
+  let hasStoryContext = $derived(projections.some((projection) => projectionHasContext(projection)))
   let hasActiveContext = $derived(hasRenderableContext(activeContext))
-  let showDescriptionPanel = $derived(overviewMode || hasActiveContext)
+  let showDescriptionPanel = $derived(
+    (overviewMode && hasStoryContext && introText.length > 0) || hasActiveContext
+  )
 
   const toAttribute = (value) => (value == null ? undefined : String(value))
 
@@ -468,7 +480,13 @@
 
       {#if showDescriptionPanel}
         <div class="lg:hidden">
-          <SceneDescription {overviewMode} {activeContext} emptyText={ui.context.emptyText} />
+          <SceneDescription
+            {overviewMode}
+            {activeContext}
+            {introText}
+            hasStoryContext={hasStoryContext}
+            emptyText={ui.context.emptyText}
+          />
         </div>
       {/if}
 
@@ -550,6 +568,8 @@
         <SceneDescription
           {overviewMode}
           {activeContext}
+          {introText}
+          hasStoryContext={hasStoryContext}
           emptyText={ui.context.emptyText}
           layout="panel"
         />

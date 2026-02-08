@@ -10,6 +10,7 @@ const DEFAULT_UI = {
     description: ''
   },
   context: {
+    introText: '',
     emptyText: 'No context for this keyframe.'
   },
   timeline: {
@@ -51,6 +52,7 @@ const resolveUiConfig = (ui) => {
       description: toTrimmedString(header.description)
     },
     context: {
+      introText: toTrimmedString(context.introText),
       emptyText: toStringOrFallback(context.emptyText, DEFAULT_UI.context.emptyText)
     },
     timeline: {
