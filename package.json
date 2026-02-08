@@ -1,16 +1,15 @@
 {
-  "name": "vantage-renderer",
-  "version": "0.0.13",
+  "name": "vantage-stories",
+  "version": "0.0.1",
   "type": "module",
   "files": [
     "dist"
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/thometnanni/vantage-renderer.git"
+    "url": "git+https://github.com/thometnanni/vantage-stories.git"
   },
   "main": "./dist/vantage-renderer.umd.cjs",
-  "module": "./dist/vantage-renderer.js",
   "exports": {
     ".": {
       "import": "./dist/vantage-renderer.js",
