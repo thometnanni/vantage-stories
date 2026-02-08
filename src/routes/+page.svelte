@@ -3,6 +3,14 @@
   import { Vector3 } from 'three'
   import SceneDescription from '$lib/components/SceneDescription.svelte'
   import TimelineControls from '$lib/components/TimelineControls.svelte'
+  import {
+    buildCurvedTransitionCurve,
+    getDisplayFov,
+    getLookTarget,
+    getTransitionProfile,
+    nextFrame,
+    runCurvedTransition
+  } from '$lib/cameraTransition'
   import data from '$lib/data'
   import { isVideoSource, resolveStarterData } from '$lib/starterkit'
 
@@ -114,16 +122,6 @@
 
   const toAttribute = (value) => (value == null ? undefined : String(value))
 
-  const easeInOutCubic = (value) => {
-    return value < 0.5 ? 4 * value * value * value : 1 - Math.pow(-2 * value + 2, 3) / 2
-  }
-
-  const nextFrame = () => {
-    return new Promise((resolve) => {
-      requestAnimationFrame(() => resolve())
-    })
-  }
-
   const activeCameraIsVideo = () => {
     const camera = getCameraById(activeCameraId)
     return camera ? isVideoSource(camera.src) : false
@@ -140,14 +138,14 @@
     currentTime = clamped
   }
 
-  const waitForProjection = (cameraId, timeoutMs = 4000) => {
+  const waitFor = (resolver, predicate = Boolean, timeoutMs = 4000) => {
     return new Promise((resolve) => {
       const start = performance.now()
 
       const poll = () => {
-        const projection = rendererElement?.projections?.[cameraId]
-        if (projection) {
-          resolve(projection)
+        const candidate = resolver()
+        if (predicate(candidate)) {
+          resolve(candidate)
           return
         }
 
@@ -163,27 +161,16 @@
     })
   }
 
+  const waitForProjection = (cameraId, timeoutMs = 4000) => {
+    return waitFor(() => rendererElement?.projections?.[cameraId], Boolean, timeoutMs)
+  }
+
   const waitForCameraOperator = (timeoutMs = 4000) => {
-    return new Promise((resolve) => {
-      const start = performance.now()
-
-      const poll = () => {
-        const operator = rendererElement?.cameraOperator
-        if (operator?.mapCamera && operator?.mapControls) {
-          resolve(operator)
-          return
-        }
-
-        if (!rendererElement || performance.now() - start > timeoutMs) {
-          resolve(null)
-          return
-        }
-
-        requestAnimationFrame(poll)
-      }
-
-      poll()
-    })
+    return waitFor(
+      () => rendererElement?.cameraOperator,
+      (operator) => Boolean(operator?.mapCamera && operator?.mapControls),
+      timeoutMs
+    )
   }
 
   const parsePosition = (value) => {
@@ -246,17 +233,6 @@
     operator.mapControls.update()
   }
 
-  const getLookTarget = (camera, distance = 16) => {
-    const forward = new Vector3(0, 0, -1).applyQuaternion(camera.quaternion)
-    return camera.position.clone().add(forward.multiplyScalar(distance))
-  }
-
-  const getDisplayFov = (projectionFov) => {
-    const safe = Number(projectionFov)
-    if (!Number.isFinite(safe)) return 88
-    return Math.min(112, Math.max(78, safe + 28))
-  }
-
   const transitionToCamera = async (cameraId, durationMs = 1800) => {
     if (!rendererElement?.cameraOperator) return
 
@@ -282,26 +258,16 @@
     const targetProjectionFov = targetCamera.isPerspectiveCamera ? targetCamera.fov : startFov
     const targetFov =
       targetProjectionFov != null ? getDisplayFov(targetProjectionFov) : startFov
-    const transitionDistance = startPosition.distanceTo(targetPosition)
-    const farFactor = Math.min(1, Math.max(0, (transitionDistance - 24) / 90))
-    const baseDuration = Math.round(durationMs * (0.5 + farFactor * 0.85))
-    const durationFromDistance = Math.round(
-      650 + transitionDistance * (14 + 12 * farFactor)
+    const { effectiveDurationMs, flyArcHeight } = getTransitionProfile(
+      startPosition,
+      targetPosition,
+      durationMs
     )
-    const effectiveDurationMs = Math.max(
-      700,
-      Math.min(4200, Math.max(baseDuration, durationFromDistance))
-    )
-    // Near hops stay almost direct; long hops get Mapbox-like flight arc over buildings.
-    const flyArcHeight = Math.min(
-      140,
-      Math.max(0, transitionDistance * (0.05 + 0.3 * farFactor) + 10 * farFactor)
-    )
+    const curvedPathCurve = buildCurvedTransitionCurve(startPosition, targetPosition, flyArcHeight)
 
     const currentControlDistance = mapControls?.target
       ? sourceCamera.position.distanceTo(mapControls.target)
       : 16
-    // Preserve current orbit radius so projection-defined camera framing stays consistent.
     const desiredLookDistance = Math.max(10, currentControlDistance)
 
     const startLookTarget = mapControls?.target?.clone?.() ?? getLookTarget(sourceCamera, desiredLookDistance)
@@ -312,57 +278,21 @@
     }
 
     isTransitioning = true
-
-    await new Promise((resolve) => {
-      let startTimestamp = 0
-
-      const frame = (timestamp) => {
-        if (token !== transitionToken) {
-          if (mapControls) {
-            mapControls.enabled = true
-            mapControls.update()
-          }
-          resolve()
-          return
-        }
-
-        if (!startTimestamp) {
-          startTimestamp = timestamp
-        }
-
-        const elapsed = timestamp - startTimestamp
-        const progress = Math.min(elapsed / effectiveDurationMs, 1)
-        const eased = easeInOutCubic(progress)
-        const blendedX = startPosition.x + (targetPosition.x - startPosition.x) * eased
-        const blendedY = startPosition.y + (targetPosition.y - startPosition.y) * eased
-        const blendedZ = startPosition.z + (targetPosition.z - startPosition.z) * eased
-        const flightLift = Math.sin(Math.PI * eased) * flyArcHeight
-
-        sourceCamera.position.set(blendedX, blendedY + flightLift, blendedZ)
-        sourceCamera.quaternion.slerpQuaternions(startQuaternion, targetQuaternion, eased)
-
-        if (sourceCamera.isPerspectiveCamera && startFov != null && targetFov != null) {
-          sourceCamera.fov = startFov + (targetFov - startFov) * eased
-          sourceCamera.updateProjectionMatrix()
-        }
-
-        if (mapControls) {
-          mapControls.target.lerpVectors(startLookTarget, targetLookTarget, eased)
-          mapControls.update()
-        }
-
-        if (progress < 1) {
-          requestAnimationFrame(frame)
-          return
-        }
-
-        resolve()
-      }
-
-      requestAnimationFrame(frame)
+    const completed = await runCurvedTransition({
+      sourceCamera,
+      mapControls,
+      startQuaternion,
+      targetQuaternion,
+      startFov,
+      targetFov,
+      startLookTarget,
+      targetLookTarget,
+      effectiveDurationMs,
+      curve: curvedPathCurve,
+      isCancelled: () => token !== transitionToken
     })
 
-    if (token === transitionToken) {
+    if (token === transitionToken && completed) {
       sourceCamera.position.copy(targetPosition)
       sourceCamera.quaternion.copy(targetQuaternion)
 
@@ -378,7 +308,14 @@
       }
 
       isTransitioning = false
+      return
     }
+
+    if (mapControls) {
+      mapControls.enabled = true
+      mapControls.update()
+    }
+    isTransitioning = false
   }
 
   const selectCamera = (cameraId) => {
