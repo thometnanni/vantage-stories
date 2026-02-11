@@ -1,4 +1,6 @@
 <script>
+  import { extractContextContent, renderContextRichText } from '$lib/contextRichText'
+
   let {
     visible = true,
     overviewMode = true,
@@ -12,17 +14,12 @@
   const normalized = (value) => (typeof value === 'string' ? value.trim() : '')
 
   let intro = $derived(normalized(introText))
+  let introHtml = $derived(renderContextRichText(intro))
   let empty = $derived(normalized(emptyText))
-  let contextString = $derived(typeof activeContext === 'string' ? normalized(activeContext) : '')
-  let contextTitle = $derived(
-    activeContext && typeof activeContext === 'object' ? normalized(activeContext.title) : ''
-  )
-  let contextText = $derived(
-    activeContext && typeof activeContext === 'object' ? normalized(activeContext.text) : ''
-  )
-  let hasContext = $derived(
-    contextString.length > 0 || contextTitle.length > 0 || contextText.length > 0
-  )
+  let activeContent = $derived(extractContextContent(activeContext))
+  let contextTitle = $derived(activeContent.title)
+  let contextHtml = $derived(renderContextRichText(activeContent.body))
+  let hasContext = $derived(contextTitle.length > 0 || contextHtml.length > 0)
   let isPanelLayout = $derived(layout === 'panel')
   let containerClass = $derived(
     isPanelLayout
@@ -39,33 +36,21 @@
 {#if shouldRender}
   <section class={containerClass}>
     {#if overviewMode}
-      <p class={isPanelLayout ? 'text-sm font-medium text-slate-900' : 'font-medium text-slate-900'}>
-        {intro}
-      </p>
-    {:else if contextString}
-      <p
-        class={isPanelLayout
-          ? 'text-sm leading-snug text-slate-700'
-          : 'max-h-24 overflow-y-auto leading-snug text-slate-700'}
-      >
-        {contextString}
-      </p>
+      <div class={`story-richtext ${isPanelLayout ? 'text-sm' : 'text-[15px]'}`}>
+        {@html introHtml}
+      </div>
     {:else if hasContext}
       {#if contextTitle}
         <p class={isPanelLayout ? 'text-sm font-semibold text-slate-900' : 'font-semibold text-slate-900'}>
           {contextTitle}
         </p>
       {/if}
-      {#if contextText}
-        <p
-          class={isPanelLayout
-            ? 'mt-1 text-sm leading-snug text-slate-700'
-            : 'max-h-20 overflow-y-auto leading-snug text-slate-700'}
+      {#if contextHtml}
+        <div
+          class={`story-richtext text-slate-700 ${isPanelLayout ? 'mt-1 text-sm' : 'mt-1 max-h-28 overflow-y-auto text-[15px]'}`}
         >
-          {contextText}
-        </p>
-      {:else if contextTitle && isPanelLayout}
-        <p class="mt-1 text-sm text-slate-700">{contextTitle}</p>
+          {@html contextHtml}
+        </div>
       {/if}
     {:else}
       <p class={isPanelLayout ? 'text-sm text-slate-500' : 'text-slate-500'}>{empty}</p>

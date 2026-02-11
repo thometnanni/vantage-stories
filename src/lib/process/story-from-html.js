@@ -23,22 +23,23 @@ const asTrimmedString = (value) => {
 }
 
 const readContext = (element, fallbackText = '') => {
-  const inlineContext = asTrimmedString(element.getAttribute('context'))
-  if (inlineContext.length > 0) {
-    return inlineContext
-  }
-
+  const inlineMarkdown =
+    asTrimmedString(element.getAttribute('context-markdown')) ||
+    asTrimmedString(element.getAttribute('context'))
   const contextTitle = asTrimmedString(element.getAttribute('context-title'))
-  const contextText = asTrimmedString(element.getAttribute('context-text'))
-  if (contextTitle.length > 0 || contextText.length > 0) {
-    return {
-      ...(contextTitle.length > 0 ? { title: contextTitle } : {}),
-      ...(contextText.length > 0 ? { text: contextText } : {})
-    }
+  const contextMarkdown =
+    inlineMarkdown ||
+    asTrimmedString(element.getAttribute('context-text')) ||
+    asTrimmedString(fallbackText)
+
+  if (contextTitle.length === 0 && contextMarkdown.length === 0) {
+    return undefined
   }
 
-  const text = asTrimmedString(fallbackText)
-  return text.length > 0 ? text : undefined
+  return {
+    ...(contextTitle.length > 0 ? { title: contextTitle } : {}),
+    ...(contextMarkdown.length > 0 ? { markdown: contextMarkdown } : {})
+  }
 }
 
 const getDirectProjectionText = (projectionEl) => {

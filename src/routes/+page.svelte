@@ -11,10 +11,11 @@
     nextFrame,
     runCurvedTransition
   } from '$lib/cameraTransition'
+  import { hasRenderableContext as contextHasRenderableContent } from '$lib/contextRichText'
   import data from '$lib/data'
   import { isVideoSource, resolveStarterData } from '$lib/starterkit'
 
-  const storyPath = '/data/g8/story.json' // path to exported story JSON from the Vantage Platform.
+  const storyPath = 'data/g8/story.json' // path to exported story JSON from the Vantage Platform.
 
   let sourceData = $state(data)
   let starter = $derived(resolveStarterData(sourceData))
@@ -38,7 +39,7 @@
 
   let rendererElement
   let transitionToken = 0
-  const AUTO_CAMERA_DWELL_MS = 4500
+  const AUTO_CAMERA_DWELL_MS = 8000
 
   const isStoryPayload = (value) => {
     return Boolean(value && typeof value === 'object' && Array.isArray(value.projections))
@@ -117,28 +118,17 @@
   let activeKeyframeContext = $derived(activeKeyframe?.context ?? null)
   let activeContext = $derived(activeKeyframeContext ?? activeProjection?.context ?? null)
   const normalizedText = (value) => (typeof value === 'string' ? value.trim() : '')
-  const hasRenderableContext = (value) => {
-    if (typeof value === 'string') {
-      return normalizedText(value).length > 0
-    }
-
-    if (value && typeof value === 'object') {
-      return normalizedText(value.title).length > 0 || normalizedText(value.text).length > 0
-    }
-
-    return false
-  }
   const projectionHasContext = (projection) => {
     if (!projection || typeof projection !== 'object') return false
-    if (hasRenderableContext(projection.context)) return true
+    if (contextHasRenderableContent(projection.context)) return true
 
     if (!Array.isArray(projection.keyframes)) return false
-    return projection.keyframes.some((keyframe) => hasRenderableContext(keyframe?.context))
+    return projection.keyframes.some((keyframe) => contextHasRenderableContent(keyframe?.context))
   }
 
   let introText = $derived(normalizedText(ui?.context?.introText))
   let hasStoryContext = $derived(projections.some((projection) => projectionHasContext(projection)))
-  let hasActiveContext = $derived(hasRenderableContext(activeContext))
+  let hasActiveContext = $derived(contextHasRenderableContent(activeContext))
   let showDescriptionPanel = $derived(
     (overviewMode && hasStoryContext && introText.length > 0) || hasActiveContext
   )

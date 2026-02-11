@@ -2,19 +2,9 @@
   "name": "vantage-stories",
   "version": "0.0.1",
   "type": "module",
-  "files": [
-    "dist"
-  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/thometnanni/vantage-stories.git"
-  },
-  "main": "./dist/vantage-renderer.umd.cjs",
-  "exports": {
-    ".": {
-      "import": "./dist/vantage-renderer.js",
-      "require": "./dist/vantage-renderer.umd.cjs"
-    }
   },
   "scripts": {
     "dev": "svelte-kit sync && vite dev",
@@ -23,7 +13,7 @@
     "build:site": "npm run build",
     "build:lib": "vite build --config vite.config.lib.js",
     "preview": "vite preview",
-    "deploy": "gh-pages -d dist --dotfiles"
+    "deploy": "gh-pages -d build --dotfiles "
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",

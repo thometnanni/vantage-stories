@@ -23,6 +23,21 @@ Process Page
 - Pick the local folder that contains the assets
 - Generate and either download or save `story.json` directly to a folder
 
+Context Authoring
+----------
+
+Context is markdown-only, so use `context.markdown` in `story.json`.
+
+```json
+{
+  "context": {
+    "title": "Checkpoint",
+    "markdown": "This is **important**.\\n\\n- First detail\\n- Second detail\\n\\n[Source](https://example.com)"
+  }
+}
+```
+
+
 Files To Edit
 ----------
 
