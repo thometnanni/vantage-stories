@@ -1,5 +1,5 @@
 {
-  "sceneSrc": "/data/g8/live_view_upload-1743167409-957551413072-2-scene.gltf",
+  "sceneSrc": "data/g8/live_view_upload-1743167409-957551413072-2-scene.gltf",
   "maxTimelineTime": 0,
   "ui": {
     "pageTitle": "Georeferenced images from the Genoa G8 Summit protest, 2001",
@@ -30,7 +30,7 @@
   "projections": [
     {
       "id": "f5166520-6065-4d97-a519-697bb7687320",
-      "src": "/data/g8/live_view_upload-1743174453-690994751799-2-map1.jpg",
+      "src": "data/g8/live_view_upload-1743174453-690994751799-2-map1.jpg",
       "projectionType": "map",
       "time": 0,
       "cameraSelectable": false,
@@ -41,12 +41,12 @@
         }
       ],
       "label": "f5166520-6065-4d97-a519-697bb7687320",
-      "previewSrc": "/data/g8/live_view_upload-1743174453-690994751799-2-map1.jpg",
+      "previewSrc": "data/g8/live_view_upload-1743174453-690994751799-2-map1.jpg",
       "startTime": 0
     },
     {
       "id": "68919057-63f3-4bfb-8af9-25a6f5e37123",
-      "src": "/data/g8/live_view_upload-1743167576-821659256128-1-Genova-G8_2001-Via_Tolemaide.jpg",
+      "src": "data/g8/live_view_upload-1743167576-821659256128-1-Genova-G8_2001-Via_Tolemaide.jpg",
       "projectionType": "perspective",
       "time": 0,
       "cameraSelectable": true,
@@ -65,12 +65,12 @@
         }
       ],
       "label": "68919057-63f3-4bfb-8af9-25a6f5e37123",
-      "previewSrc": "/data/g8/live_view_upload-1743167576-821659256128-1-Genova-G8_2001-Via_Tolemaide.jpg",
+      "previewSrc": "data/g8/live_view_upload-1743167576-821659256128-1-Genova-G8_2001-Via_Tolemaide.jpg",
       "startTime": 0
     },
     {
       "id": "c6004594-430c-4702-b8f6-0f7648c8ba7c",
-      "src": "/data/g8/live_view_upload-1743173778-80144910757-1-Genova-G8_2001-Carica_della_polizia.jpg",
+      "src": "data/g8/live_view_upload-1743173778-80144910757-1-Genova-G8_2001-Carica_della_polizia.jpg",
       "projectionType": "perspective",
       "time": 0,
       "cameraSelectable": true,
@@ -89,12 +89,12 @@
         }
       ],
       "label": "c6004594-430c-4702-b8f6-0f7648c8ba7c",
-      "previewSrc": "/data/g8/live_view_upload-1743173778-80144910757-1-Genova-G8_2001-Carica_della_polizia.jpg",
+      "previewSrc": "data/g8/live_view_upload-1743173778-80144910757-1-Genova-G8_2001-Carica_della_polizia.jpg",
       "startTime": 0
     },
     {
       "id": "2d725855-b92e-4aff-b4c8-152be4ebc37c",
-      "src": "/data/g8/live_view_upload-1768470875-701563560440-1-2026-01-15_genova.jpg",
+      "src": "data/g8/live_view_upload-1768470875-701563560440-1-2026-01-15_genova.jpg",
       "projectionType": "perspective",
       "time": 0,
       "cameraSelectable": true,
@@ -113,12 +113,12 @@
         }
       ],
       "label": "2d725855-b92e-4aff-b4c8-152be4ebc37c",
-      "previewSrc": "/data/g8/live_view_upload-1768470875-701563560440-1-2026-01-15_genova.jpg",
+      "previewSrc": "data/g8/live_view_upload-1768470875-701563560440-1-2026-01-15_genova.jpg",
       "startTime": 0
     },
     {
       "id": "dabf998a-636a-4a46-88d3-dd3720f1eba3",
-      "src": "/data/g8/live_view_upload-1770550135-867519059969-1-Genova-G8_2001-Incidenti_a_Corso_Torino.jpg",
+      "src": "data/g8/live_view_upload-1770550135-867519059969-1-Genova-G8_2001-Incidenti_a_Corso_Torino.jpg",
       "projectionType": "perspective",
       "time": 0,
       "cameraSelectable": true,
@@ -137,12 +137,12 @@
         }
       ],
       "label": "dabf998a-636a-4a46-88d3-dd3720f1eba3",
-      "previewSrc": "/data/g8/live_view_upload-1770550135-867519059969-1-Genova-G8_2001-Incidenti_a_Corso_Torino.jpg",
+      "previewSrc": "data/g8/live_view_upload-1770550135-867519059969-1-Genova-G8_2001-Incidenti_a_Corso_Torino.jpg",
       "startTime": 0
     },
     {
       "id": "1e56df8f-3464-4b19-a3dd-5983fd03648b",
-      "src": "/data/g8/live_view_upload-1770560596-177319706821-1-Genova_G8%2C_le_grate_della_Zona_Rossa.jpg",
+      "src": "data/g8/live_view_upload-1770560596-177319706821-1-Genova_G8%2C_le_grate_della_Zona_Rossa.jpg",
       "projectionType": "perspective",
       "time": 0,
       "cameraSelectable": true,
@@ -161,7 +161,7 @@
         }
       ],
       "label": "1e56df8f-3464-4b19-a3dd-5983fd03648b",
-      "previewSrc": "/data/g8/live_view_upload-1770560596-177319706821-1-Genova_G8%2C_le_grate_della_Zona_Rossa.jpg",
+      "previewSrc": "data/g8/live_view_upload-1770560596-177319706821-1-Genova_G8%2C_le_grate_della_Zona_Rossa.jpg",
       "startTime": 0
     }
   ]
