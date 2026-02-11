@@ -117,7 +117,7 @@
       </button>
     {/if}
 
-    {#if showFrameToggle}
+    <!-- {#if showFrameToggle}
       <button
         type="button"
         class={`rounded-[var(--radius-button)] px-2 py-0.5 text-[11px] font-semibold transition ${
@@ -129,7 +129,7 @@
       >
         Frame {frameVisible ? labels.on ?? 'On' : labels.off ?? 'Off'}
       </button>
-    {/if}
+    {/if} -->
 
     {#if showTimeline}
       <p class="mono ml-auto text-[10px] uppercase tracking-[0.14em] text-slate-600">{timeLabel}s / {maxTime}s</p>
