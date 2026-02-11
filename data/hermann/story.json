@@ -59,7 +59,7 @@
       "projectionType": "perspective",
       "context": {
         "title": "Track Overview",
-        "text": "Main video track with keyframe-specific notes along the route."
+        "markdown": "Main video track with keyframe-specific notes along the route."
       },
       "time": 0,
       "cameraSelectable": true,
@@ -69,7 +69,7 @@
           "time": 0,
           "context": {
             "title": "Start",
-            "text": "Fidel is recording a video in Hermannstraße."
+            "markdown": "Fidel is recording a video in Hermannstraße."
           },
           "position": "294.77421067919875 1.4999999999998863 -59.18060851575354",
           "rotation": "-0.008372093023264113 1.2537829457366076 5.247431163371475e-15",
