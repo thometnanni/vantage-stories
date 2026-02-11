@@ -1,4 +1,4 @@
-import { resolveStarterData } from '$lib/starterkit'
+import { resolveStoryData } from '$lib/story/core/storyData'
 
 const asNumber = (value, fallback) => {
   const parsed = Number(value)
@@ -177,7 +177,7 @@ export const createStoryFromRendererHtml = (htmlSnippet) => {
     projections: extractProjections(renderer)
   }
 
-  const resolved = resolveStarterData(starterInput)
+  const resolved = resolveStoryData(starterInput)
 
   const story = {
     sceneSrc: resolved.sceneSrc,
@@ -193,9 +193,8 @@ export const createStoryFromRendererHtml = (htmlSnippet) => {
   for (const projection of story.projections) {
     const src = localizeAssetPath(projection.src)
     if (src) assetPaths.add(src)
-
-    const preview = localizeAssetPath(projection.previewSrc)
-    if (preview) assetPaths.add(preview)
+    const previewSrc = localizeAssetPath(projection.previewSrc)
+    if (previewSrc) assetPaths.add(previewSrc)
   }
 
   return {
