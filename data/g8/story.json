@@ -1,0 +1,159 @@
+{
+  "sceneSrc": "/data/g8/live_view_upload-1743167409-957551413072-2-scene.gltf",
+  "maxTimelineTime": 0,
+  "ui": {
+    "pageTitle": "Images from the Genoa G8 Summit protest, 2001",
+    "header": {
+      "title": "Images from the Genoa G8 Summit protest, 2001",
+      "description": ""
+    },
+    "context": {
+      "emptyText": "",
+      "introText": ""
+    },
+    "timeline": {
+      "play": "Play",
+      "pause": "Pause",
+      "follow": "Follow",
+      "on": "On",
+      "off": "Off"
+    },
+    "renderer": {
+      "loading": "Loading renderer"
+    },
+    "credits": {
+      "symbol": "©",
+      "label": "OpenStreetMap contributors",
+      "href": "https://www.openstreetmap.org/copyright"
+    }
+  },
+  "projections": [
+    {
+      "id": "f5166520-6065-4d97-a519-697bb7687320",
+      "src": "/data/g8/live_view_upload-1743174453-690994751799-2-map1.jpg",
+      "projectionType": "map",
+      "time": 0,
+      "cameraSelectable": false,
+      "keyframes": [
+        {
+          "time": 0,
+          "opacity": 1
+        }
+      ],
+      "label": "f5166520-6065-4d97-a519-697bb7687320",
+      "previewSrc": "/data/g8/live_view_upload-1743174453-690994751799-2-map1.jpg",
+      "startTime": 0
+    },
+    {
+      "id": "68919057-63f3-4bfb-8af9-25a6f5e37123",
+      "src": "/data/g8/live_view_upload-1743167576-821659256128-1-Genova-G8_2001-Via_Tolemaide.jpg",
+      "projectionType": "perspective",
+      "time": 0,
+      "cameraSelectable": true,
+      "context": {
+        "text": "A burned-out car at the intersection of Via Montevideo and Via Tolemaide in Genoa following clashes during the G8 summit protests, July 2001. <br><br> Photo by Ares Ferrari, Wikimedia Commons (CC BY 2.5 / GFDL)"
+      },
+      "keyframes": [
+        {
+          "time": 0,
+          "position": "954.4510826286892 1.5 29.314064182310364",
+          "rotation": "0.09800000000001512 1.949185307179832 -0.02000000000000972",
+          "fov": 41.34999999999951,
+          "far": 200,
+          "opacity": 1,
+          "screen": true
+        }
+      ],
+      "label": "68919057-63f3-4bfb-8af9-25a6f5e37123",
+      "previewSrc": "/data/g8/live_view_upload-1743167576-821659256128-1-Genova-G8_2001-Via_Tolemaide.jpg",
+      "startTime": 0
+    },
+    {
+      "id": "c6004594-430c-4702-b8f6-0f7648c8ba7c",
+      "src": "/data/g8/live_view_upload-1743173778-80144910757-1-Genova-G8_2001-Carica_della_polizia.jpg",
+      "projectionType": "perspective",
+      "time": 0,
+      "cameraSelectable": true,
+      "context": {
+        "text": "A burned-out car at the intersection of Via Montevideo and Via Tolemaide in Genoa following clashes during the G8 summit protests, July 2001. Photo by Ares Ferrari, Wikimedia Commons (CC BY 2.5 / GFDL)"
+      },
+      "keyframes": [
+        {
+          "time": 0,
+          "position": "75.65543863399235 0.9975510002532815 108.93246892815363",
+          "rotation": "0.04200000000000026 -2.6790658503988727 -0.020000000000001072",
+          "fov": 25.649999999999906,
+          "far": 150,
+          "opacity": 1,
+          "screen": true
+        }
+      ],
+      "label": "c6004594-430c-4702-b8f6-0f7648c8ba7c",
+      "previewSrc": "/data/g8/live_view_upload-1743173778-80144910757-1-Genova-G8_2001-Carica_della_polizia.jpg",
+      "startTime": 0
+    },
+    {
+      "id": "2d725855-b92e-4aff-b4c8-152be4ebc37c",
+      "src": "/data/g8/live_view_upload-1768470875-701563560440-1-2026-01-15_genova.jpg",
+      "projectionType": "perspective",
+      "time": 0,
+      "cameraSelectable": true,
+      "keyframes": [
+        {
+          "time": 0,
+          "position": "149.55806096606656 1.5000000000015916 989.9414135811321",
+          "rotation": "-0.03200000000001374 0.41000000000012526 0.04000000000000405",
+          "fov": 37.94999999999998,
+          "far": 150,
+          "opacity": 1,
+          "screen": true
+        }
+      ],
+      "label": "2d725855-b92e-4aff-b4c8-152be4ebc37c",
+      "previewSrc": "/data/g8/live_view_upload-1768470875-701563560440-1-2026-01-15_genova.jpg",
+      "startTime": 0
+    },
+    {
+      "id": "dabf998a-636a-4a46-88d3-dd3720f1eba3",
+      "src": "/data/g8/live_view_upload-1770550135-867519059969-1-Genova-G8_2001-Incidenti_a_Corso_Torino.jpg",
+      "projectionType": "perspective",
+      "time": 0,
+      "cameraSelectable": true,
+      "keyframes": [
+        {
+          "time": 0,
+          "position": "472.69492545850073 1.5 55.465193842588576",
+          "rotation": "0.08000000000000207 -0.2640000000000069 4.2683193073591086e-16",
+          "fov": 53.50000000000001,
+          "far": 50,
+          "opacity": 1,
+          "screen": true
+        }
+      ],
+      "label": "dabf998a-636a-4a46-88d3-dd3720f1eba3",
+      "previewSrc": "/data/g8/live_view_upload-1770550135-867519059969-1-Genova-G8_2001-Incidenti_a_Corso_Torino.jpg",
+      "startTime": 0
+    },
+    {
+      "id": "1e56df8f-3464-4b19-a3dd-5983fd03648b",
+      "src": "/data/g8/live_view_upload-1770560596-177319706821-1-Genova_G8%2C_le_grate_della_Zona_Rossa.jpg",
+      "projectionType": "perspective",
+      "time": 0,
+      "cameraSelectable": true,
+      "keyframes": [
+        {
+          "time": 0,
+          "position": "-129.07137127372673 1.5 15.364980881218377",
+          "rotation": "0.07399999999999723 1.5853705988362374 -0.01999999999999816",
+          "fov": 51.95000000000001,
+          "far": 80,
+          "opacity": 1,
+          "screen": true
+        }
+      ],
+      "label": "1e56df8f-3464-4b19-a3dd-5983fd03648b",
+      "previewSrc": "/data/g8/live_view_upload-1770560596-177319706821-1-Genova_G8%2C_le_grate_della_Zona_Rossa.jpg",
+      "startTime": 0
+    }
+  ]
+}
