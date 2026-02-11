@@ -19,8 +19,9 @@
   "scripts": {
     "dev": "svelte-kit sync && vite dev",
     "dev:legacy": "vite --config vite.config.site.js",
-    "build": "vite build --config vite.config.lib.js",
-    "build:site": "svelte-kit sync && vite build",
+    "build": "svelte-kit sync && vite build",
+    "build:site": "npm run build",
+    "build:lib": "vite build --config vite.config.lib.js",
     "preview": "vite preview"
   },
   "devDependencies": {
