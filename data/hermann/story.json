@@ -54,7 +54,7 @@
       "id": "story-track",
       "label": "Story Track",
       "src": "https://media.krisenstab.net/hermann-crf-38.mp4",
-      "previewSrc": "./data/hermann/long-story-still.jpg",
+      "previewSrc": "/data/hermann/hermann-3.jpg",
       "projectionType": "perspective",
       "context": {
         "title": "Track Overview",
