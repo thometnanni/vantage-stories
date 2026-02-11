@@ -1,4 +1,6 @@
-import { CatmullRomCurve3, Vector3 } from 'three'
+import { CatmullRomCurve3, LineCurve3, Vector3 } from 'three'
+
+const LINEAR_TRANSITION_DISTANCE = 40
 
 export const nextFrame = () => {
   return new Promise((resolve) => {
@@ -40,6 +42,10 @@ export const getTransitionProfile = (startPosition, targetPosition, durationMs) 
 
 export const buildCurvedTransitionCurve = (startPosition, targetPosition, arcHeight) => {
   const distance = startPosition.distanceTo(targetPosition)
+  if (distance <= LINEAR_TRANSITION_DISTANCE) {
+    return new LineCurve3(startPosition.clone(), targetPosition.clone())
+  }
+
   const midpoint = startPosition.clone().lerp(targetPosition, 0.5)
   const travel = targetPosition.clone().sub(startPosition)
   const side = new Vector3(-travel.z, 0, travel.x)
@@ -47,7 +53,7 @@ export const buildCurvedTransitionCurve = (startPosition, targetPosition, arcHei
     side.normalize().multiplyScalar(Math.min(22, distance * 0.2))
   }
 
-  const apexHeight = Math.max(18, arcHeight + distance * 0.08)
+  const apexHeight = Math.max(8, arcHeight + distance * 0.08)
   const controlA = startPosition
     .clone()
     .lerp(midpoint, 0.45)
