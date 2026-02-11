@@ -3,16 +3,18 @@
     currentTime,
     maxTime,
     isPlaying,
+    autoEnabled = true,
     followEnabled = false,
     showFollow = false,
+    showAutoToggle = false,
     showFrameToggle = false,
     showMediaToggle = false,
     frameVisible = false,
     mediaOpen = false,
     cameraTracks = [],
     activeCameraId = '',
-    labels = {},
     onPlayToggle,
+    onAutoToggle,
     onFollowToggle,
     onFrameToggle,
     onMediaToggle,
@@ -63,7 +65,7 @@
     {#if showTimeline}
       <button
         type="button"
-        aria-label={isPlaying ? labels.pause ?? 'Pause' : labels.play ?? 'Play'}
+        aria-label={isPlaying ? 'Pause' : 'Play'}
         class="flex h-6 w-7 items-center justify-center rounded-[var(--radius-button)] border border-[var(--panel-stroke)] bg-white text-slate-900 transition hover:bg-slate-100"
         onclick={onPlayToggle}
       >
@@ -113,7 +115,21 @@
         }`}
         onclick={onFollowToggle}
       >
-        {labels.follow ?? 'Follow'} {followEnabled ? labels.on ?? 'On' : labels.off ?? 'Off'}
+        Follow
+      </button>
+    {/if}
+
+    {#if showAutoToggle}
+      <button
+        type="button"
+        class={`rounded-[var(--radius-button)] px-2 py-0.5 text-[11px] font-semibold transition ${
+          autoEnabled
+            ? 'bg-[var(--lime)] text-slate-950 hover:brightness-95'
+            : 'border border-[var(--panel-stroke)] bg-white text-slate-700 hover:bg-slate-100'
+        }`}
+        onclick={onAutoToggle}
+      >
+        Auto Play
       </button>
     {/if}
 
@@ -127,7 +143,7 @@
         }`}
         onclick={onFrameToggle}
       >
-        Frame {frameVisible ? labels.on ?? 'On' : labels.off ?? 'Off'}
+        Frame
       </button>
     {/if} -->
 

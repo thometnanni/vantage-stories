@@ -28,14 +28,17 @@
   let currentTime = $state(0)
   let isPlaying = $state(false)
   let isTransitioning = $state(false)
+  let autoTransitionEnabled = $state(true)
   let overviewMode = $state(true)
   let cameraFrameVisible = $state(false)
   let mediaTimelineOpen = $state(true)
   let followEnabled = $state(false)
   let activeCameraId = $state('')
+  let autoPlaybackStarted = $state(false)
 
   let rendererElement
   let transitionToken = 0
+  const AUTO_CAMERA_DWELL_MS = 4500
 
   const isStoryPayload = (value) => {
     return Boolean(value && typeof value === 'object' && Array.isArray(value.projections))
@@ -60,6 +63,26 @@
 
   function getCameraById(cameraId) {
     return cameraTracks.find((item) => item.id === cameraId)
+  }
+
+  const getCameraForTime = (timelineTime) => {
+    if (cameraTracks.length === 0) return null
+
+    const safeTime = Number.isFinite(timelineTime) ? Math.max(0, timelineTime) : 0
+    let selected = cameraTracks[0]
+    let selectedStartTime = Number(selected?.startTime) || 0
+    for (const camera of cameraTracks) {
+      const cameraStartTime = Number(camera.startTime) || 0
+      if (cameraStartTime > safeTime) {
+        break
+      }
+      if (cameraStartTime > selectedStartTime) {
+        selected = camera
+        selectedStartTime = cameraStartTime
+      }
+    }
+
+    return selected
   }
 
   let activeProjection = $derived(
@@ -136,6 +159,9 @@
   const setTime = (nextTime) => {
     const clamped = Math.max(0, Math.min(maxTimelineTime, nextTime))
     currentTime = clamped
+    if (!isPlaying && autoTransitionEnabled) {
+      syncAutoCameraForTime(clamped, 900)
+    }
   }
 
   const waitFor = (resolver, predicate = Boolean, timeoutMs = 4000) => {
@@ -318,17 +344,52 @@
     isTransitioning = false
   }
 
-  const selectCamera = (cameraId) => {
+  const selectCamera = (
+    cameraId,
+    { setTimeline = true, transitionDurationMs = 1800 } = {}
+  ) => {
     const camera = getCameraById(cameraId)
     if (!camera) return
 
     overviewMode = false
     activeCameraId = camera.id
     followEnabled = isVideoSource(camera.src)
-    setTime(camera.startTime ?? 0)
+    if (setTimeline) {
+      setTime(camera.startTime ?? 0)
+    }
     ensureFollowState()
 
-    void transitionToCamera(camera.id)
+    void transitionToCamera(camera.id, transitionDurationMs)
+  }
+
+  const syncAutoCameraForTime = (timelineTime, transitionDurationMs = 1200) => {
+    if (!autoTransitionEnabled) return
+    const targetCamera = getCameraForTime(timelineTime)
+    if (!targetCamera || targetCamera.id === activeCameraId) return
+    selectCamera(targetCamera.id, { setTimeline: false, transitionDurationMs })
+  }
+
+  const toggleAutoTransition = () => {
+    autoTransitionEnabled = !autoTransitionEnabled
+    if (autoTransitionEnabled) {
+      syncAutoCameraForTime(currentTime, 900)
+    }
+  }
+
+  const togglePlayback = () => {
+    if (isPlaying) {
+      isPlaying = false
+      return
+    }
+
+    if (autoTransitionEnabled) {
+      if (maxTimelineTime > 0) {
+        syncAutoCameraForTime(currentTime, 1000)
+      } else if (!activeCameraId && cameraTracks.length > 0) {
+        selectCamera(cameraTracks[0].id, { setTimeline: false, transitionDurationMs: 1000 })
+      }
+    }
+    isPlaying = true
   }
 
   const toggleFollow = () => {
@@ -358,12 +419,51 @@
   })
 
   $effect(() => {
-    if (maxTimelineTime > 0) return
+    if (maxTimelineTime > 0 || cameraTracks.length > 1) return
     if (isPlaying) isPlaying = false
   })
 
   $effect(() => {
-    if (!isPlaying) return
+    if (!rendererReady || autoPlaybackStarted || !autoTransitionEnabled) return
+    if (cameraTracks.length === 0) return
+
+    autoPlaybackStarted = true
+    if (maxTimelineTime > 0) {
+      setTime(0)
+      syncAutoCameraForTime(0, 1300)
+    } else {
+      selectCamera(cameraTracks[0].id, { setTimeline: false, transitionDurationMs: 1300 })
+    }
+    isPlaying = true
+  })
+
+  $effect(() => {
+    if (!isPlaying || !autoTransitionEnabled || cameraTracks.length === 0) return
+    if (maxTimelineTime <= 0) return
+    syncAutoCameraForTime(currentTime)
+  })
+
+  $effect(() => {
+    if (!isPlaying || !autoTransitionEnabled) return
+    if (maxTimelineTime > 0 || cameraTracks.length < 2) return
+
+    const interval = setInterval(() => {
+      const activeIndex = untrack(() =>
+        cameraTracks.findIndex((camera) => camera.id === activeCameraId)
+      )
+      const nextIndex = activeIndex >= 0 ? (activeIndex + 1) % cameraTracks.length : 0
+      const nextCamera = cameraTracks[nextIndex]
+      if (!nextCamera) return
+      selectCamera(nextCamera.id, { setTimeline: false, transitionDurationMs: 1200 })
+    }, AUTO_CAMERA_DWELL_MS)
+
+    return () => {
+      clearInterval(interval)
+    }
+  })
+
+  $effect(() => {
+    if (!isPlaying || maxTimelineTime <= 0) return
 
     let animationFrame = 0
     let lastFrame = 0
@@ -475,7 +575,9 @@
           {currentTime}
           maxTime={maxTimelineTime}
           {isPlaying}
+          autoEnabled={autoTransitionEnabled}
           {followEnabled}
+          showAutoToggle={cameraTracks.length > 1}
           showFollow={activeCameraIsVideo()}
           showFrameToggle={true}
           frameVisible={cameraFrameVisible}
@@ -483,10 +585,8 @@
           mediaOpen={mediaTimelineOpen}
           {cameraTracks}
           {activeCameraId}
-          labels={ui.timeline}
-          onPlayToggle={() => {
-            isPlaying = !isPlaying
-          }}
+          onPlayToggle={togglePlayback}
+          onAutoToggle={toggleAutoTransition}
           onFollowToggle={toggleFollow}
           onFrameToggle={() => {
             cameraFrameVisible = !cameraFrameVisible

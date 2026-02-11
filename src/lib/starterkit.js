@@ -13,13 +13,6 @@ const DEFAULT_UI = {
     introText: '',
     emptyText: 'No context for this keyframe.'
   },
-  timeline: {
-    play: 'Play',
-    pause: 'Pause',
-    follow: 'Follow',
-    on: 'On',
-    off: 'Off'
-  },
   renderer: {
     loading: 'Loading renderer'
   },
@@ -41,7 +34,6 @@ const resolveUiConfig = (ui) => {
   const toSection = (value) => (value && typeof value === 'object' ? value : {})
   const header = toSection(source.header)
   const context = toSection(source.context)
-  const timeline = toSection(source.timeline)
   const renderer = toSection(source.renderer)
   const credits = toSection(source.credits)
 
@@ -54,13 +46,6 @@ const resolveUiConfig = (ui) => {
     context: {
       introText: toTrimmedString(context.introText),
       emptyText: toStringOrFallback(context.emptyText, DEFAULT_UI.context.emptyText)
-    },
-    timeline: {
-      play: toStringOrFallback(timeline.play, DEFAULT_UI.timeline.play),
-      pause: toStringOrFallback(timeline.pause, DEFAULT_UI.timeline.pause),
-      follow: toStringOrFallback(timeline.follow, DEFAULT_UI.timeline.follow),
-      on: toStringOrFallback(timeline.on, DEFAULT_UI.timeline.on),
-      off: toStringOrFallback(timeline.off, DEFAULT_UI.timeline.off)
     },
     renderer: {
       loading: toStringOrFallback(renderer.loading, DEFAULT_UI.renderer.loading)
