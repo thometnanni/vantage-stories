@@ -1,5 +1,5 @@
 {
-  "sceneSrc": "./data/hermann/scene.gltf",
+  "sceneSrc": "/data/hermann/scene.gltf",
   "maxTimelineTime": 100,
   "ui": {
     "pageTitle": "Hermannstraße",
@@ -39,8 +39,7 @@
     {
       "id": "overview-map",
       "label": "Map",
-      "src": "./data/hermann/aerial.jpg",
-      "previewSrc": "./data/hermann/aerial.jpg",
+      "src": "/data/hermann/aerial.jpg",
       "projectionType": "map",
       "time": 0,
       "cameraSelectable": false,
@@ -137,8 +136,7 @@
     {
       "id": "hermann-1",
       "label": "Hermann 1",
-      "src": "./data/hermann/hermann-1.jpg",
-      "previewSrc": "./data/hermann/hermann-1.jpg",
+      "src": "/data/hermann/hermann-1.jpg",
       "projectionType": "perspective",
       "time": 6.217393432869777,
       "cameraSelectable": true,
@@ -158,8 +156,7 @@
     {
       "id": "hermann-2",
       "label": "Hermann 2",
-      "src": "./data/hermann/hermann-2.jpg",
-      "previewSrc": "./data/hermann/hermann-2.jpg",
+      "src": "/data/hermann/hermann-2.jpg",
       "projectionType": "perspective",
       "time": 34.73364667277495,
       "cameraSelectable": true,
@@ -179,8 +176,7 @@
     {
       "id": "hermann-3",
       "label": "Hermann 3",
-      "src": "./data/hermann/hermann-3.jpg",
-      "previewSrc": "./data/hermann/hermann-3.jpg",
+      "src": "/data/hermann/hermann-3.jpg",
       "projectionType": "perspective",
       "time": 45.55015652239416,
       "cameraSelectable": true,
@@ -200,8 +196,7 @@
     {
       "id": "hermann-4",
       "label": "Hermann 4",
-      "src": "./data/hermann/hermann-4.jpg",
-      "previewSrc": "./data/hermann/hermann-4.jpg",
+      "src": "/data/hermann/hermann-4.jpg",
       "projectionType": "perspective",
       "time": 63.49572968198966,
       "cameraSelectable": true,
@@ -221,8 +216,7 @@
     {
       "id": "hermann-5",
       "label": "Hermann 5",
-      "src": "./data/hermann/hermann-5.jpg",
-      "previewSrc": "./data/hermann/hermann-5.jpg",
+      "src": "/data/hermann/hermann-5.jpg",
       "projectionType": "perspective",
       "time": 84.88291961191854,
       "cameraSelectable": true,
@@ -242,8 +236,7 @@
     {
       "id": "hermann-6",
       "label": "Hermann 6",
-      "src": "./data/hermann/hermann-6.jpg",
-      "previewSrc": "./data/hermann/hermann-6.jpg",
+      "src": "/data/hermann/hermann-6.jpg",
       "projectionType": "perspective",
       "time": 86.60372799708526,
       "cameraSelectable": true,
