@@ -17,10 +17,15 @@ import { getSelectedKeyframe } from './utils'
 
 const FIRST_PERSON_MOVE_STEP = 0.2
 const FIRST_PERSON_VERTICAL_STEP = 0.2
+const MAP_ROTATE_SPEED = 0.45
+const MAP_PAN_SPEED = 0.8
+const MAP_ZOOM_SPEED = 0.75
+const FIRST_PERSON_POINTER_SPEED = 0.45
 
 export default class CameraOperator extends EventDispatcher {
   mapCamera = new PerspectiveCamera(60, innerWidth / innerHeight, 1, 10000)
   fpCamera = new PerspectiveCamera(60, innerWidth / innerHeight, 1, 10000)
+  rendererDomElement
   mapControls
   projection
   #firstPerson
@@ -39,6 +44,7 @@ export default class CameraOperator extends EventDispatcher {
     super()
     // this.renderer = renderer
     this.domElement = domElement
+    this.rendererDomElement = renderer.domElement
     this.scene = scene
     this.mapCamera.position.set(...mapCameraPosition)
     // if (mapCameraRotation) {
@@ -50,6 +56,12 @@ export default class CameraOperator extends EventDispatcher {
     this.mapControls = new MapControls(this.mapCamera, renderer.domElement)
     this.mapControls.minDistance = 10
     this.mapControls.maxDistance = 1000
+    this.mapControls.rotateSpeed = MAP_ROTATE_SPEED
+    this.mapControls.panSpeed = MAP_PAN_SPEED
+    this.mapControls.zoomSpeed = MAP_ZOOM_SPEED
+    if ('zoomToCursor' in this.mapControls) {
+      this.mapControls.zoomToCursor = true
+    }
     // this.mapControls.target = new Vector3(0, 0, 0)
 
     this.fpControls = new PointerLockControls(
@@ -58,6 +70,7 @@ export default class CameraOperator extends EventDispatcher {
       domElement
       // this.domElement
     )
+    this.fpControls.pointerSpeed = FIRST_PERSON_POINTER_SPEED
 
     this.fpControls.addEventListener('unlock', () => {
       this.map()
@@ -72,6 +85,7 @@ export default class CameraOperator extends EventDispatcher {
 
     this.firstPerson = firstPerson
     this.controls = controls
+    this.rendererDomElement.addEventListener('pointerdown', this.pointerdown)
     document.addEventListener('keydown', this.keydown)
     document.addEventListener('mousedown', this.mousedown)
     document.addEventListener('wheel', this.wheel)
@@ -209,7 +223,9 @@ export default class CameraOperator extends EventDispatcher {
     }
   }
 
-  mousedown = () => {
+  mousedown = (event) => {
+    const path = typeof event.composedPath === 'function' ? event.composedPath() : []
+    if (!path.includes(this.domElement) && !path.includes(this.rendererDomElement)) return
     if (!this.fpControls.enabled || this.#focusCamera == null) return
     this.fpControls.attachCamera(this.#focusCamera)
     window.addEventListener(
@@ -228,6 +244,8 @@ export default class CameraOperator extends EventDispatcher {
   }
 
   wheel = (event) => {
+    const path = typeof event.composedPath === 'function' ? event.composedPath() : []
+    if (!path.includes(this.domElement) && !path.includes(this.rendererDomElement)) return
     if (!this.fpControls.enabled || this.#focusCamera == null) return
     this.fpControls.attachCamera(this.#focusCamera)
 
@@ -252,6 +270,40 @@ export default class CameraOperator extends EventDispatcher {
       type: 'vantage:update-fov',
       value: this.#focusCamera.fov
     })
+  }
+
+  pointerdown = (event) => {
+    if (!this.controls || this.firstPerson || !this.mapControls?.enabled) return
+    if (event.button !== 2 && !(event.button === 0 && event.ctrlKey)) return
+    if (!this.#setMouseFromClient(event.clientX, event.clientY)) return
+
+    const raycaster = new Raycaster()
+    raycaster.setFromCamera(this.mouse, this.mapCamera)
+
+    const base = this.scene.getObjectByName('vantage:base')
+    const hit = base ? raycaster.intersectObject(base, true)[0] : null
+
+    if (hit?.point) {
+      this.mapControls.target.copy(hit.point)
+      this.mapControls.update()
+      return
+    }
+
+    const anchorY = this.#focusCamera?.position?.y ?? 0
+    const plane = new Plane(new Vector3(0, 1, 0), -anchorY)
+    const intersection = new Vector3()
+    if (raycaster.ray.intersectPlane(plane, intersection)) {
+      this.mapControls.target.copy(intersection)
+      this.mapControls.update()
+    }
+  }
+
+  #setMouseFromClient(clientX, clientY) {
+    const rect = this.rendererDomElement.getBoundingClientRect()
+    if (rect.width <= 0 || rect.height <= 0) return false
+    this.mouse.x = ((clientX - rect.left) / rect.width) * 2 - 1
+    this.mouse.y = -((clientY - rect.top) / rect.height) * 2 + 1
+    return true
   }
 
   createFocusMarker() {
@@ -299,9 +351,7 @@ export default class CameraOperator extends EventDispatcher {
   }
 
   updateMouse(event) {
-    const rect = this.domElement.getBoundingClientRect()
-    this.mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1
-    this.mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1
+    this.#setMouseFromClient(event.clientX, event.clientY)
   }
 
   initDragControls(projections) {
@@ -309,7 +359,7 @@ export default class CameraOperator extends EventDispatcher {
       this.dragControls.dispose()
       this.dragControls = null
     }
-    this.dragControls = new DragControls([this.focusMarker], this.mapCamera, this.domElement)
+    this.dragControls = new DragControls([this.focusMarker], this.mapCamera, this.rendererDomElement)
     this.dragControls.raycaster.layers.enable(2)
 
     this.dragControls.addEventListener('dragstart', () => {
