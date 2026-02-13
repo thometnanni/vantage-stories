@@ -288,7 +288,7 @@
     class="tiny-shadow rounded-[var(--radius)] border border-[var(--panel-stroke)] bg-[var(--panel-fill)] px-3 py-2"
   >
     <p class="mono text-[10px] uppercase tracking-[0.16em] text-slate-600">Vantage Utils</p>
-    <h1 class="text-base font-semibold text-slate-900">/process</h1>
+    <h1 class="text-base font-normal text-slate-900">/process</h1>
     <p class="text-sm text-slate-700">
       Paste a <code class="mono">&lt;vantage-renderer&gt;</code> block, pick the local folder with
       assets, then generate <code class="mono">story.json</code>.
@@ -331,7 +331,7 @@
       ></textarea>
 
       <div class="mt-2 rounded-[var(--radius-button)] border border-[var(--stroke)] bg-white p-2">
-        <label for="folder-input" class="block text-xs font-medium text-slate-800"
+        <label for="folder-input" class="block text-xs font-normal text-slate-800"
           >Local folder (optional asset check)</label
         >
         <input
@@ -358,7 +358,7 @@
       <div class="mt-2 flex flex-wrap gap-2">
         <button
           type="button"
-          class="rounded-[var(--radius-button)] bg-[var(--lime)] px-3 py-1.5 text-xs font-semibold text-slate-950 hover:brightness-95"
+          class="rounded-[var(--radius-button)] bg-[var(--lime)] px-3 py-1.5 text-xs font-normal text-slate-950 hover:brightness-95"
           onclick={generateStory}
         >
           Generate story.json
@@ -477,7 +477,7 @@
         <div
           class="mt-2 max-h-28 overflow-y-auto rounded-[var(--radius-button)] border border-amber-200 bg-amber-50 p-2 text-xs text-amber-800"
         >
-          <p class="mb-1 font-medium">Missing paths</p>
+          <p class="mb-1 font-normal">Missing paths</p>
           <ul class="mono space-y-0.5">
             {#each assetValidation.missing as item (item)}
               <li>{item}</li>

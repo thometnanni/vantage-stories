@@ -116,6 +116,14 @@ const extractProjections = (container) => {
       keyframes
     }
 
+    if (projectionEl.hasAttribute('focus')) {
+      projection.focus = asBool(projectionEl.getAttribute('focus'), true)
+    }
+
+    if (projectionEl.hasAttribute('camera-path')) {
+      projection.cameraPath = asBool(projectionEl.getAttribute('camera-path'), true)
+    }
+
     const label = asTrimmedString(projectionEl.getAttribute('label'))
     if (label.length > 0) projection.label = label
 
@@ -177,11 +185,21 @@ export const createStoryFromRendererHtml = (htmlSnippet) => {
     projections: extractProjections(renderer)
   }
 
+  const focusedProjection = starterInput.projections.find(
+    (projection) => projection.focus === true && projection.projectionType === 'perspective'
+  )
+  if (focusedProjection) {
+    starterInput.cameraPathProjectionId = focusedProjection.id
+  }
+
   const resolved = resolveStoryData(starterInput)
 
   const story = {
     sceneSrc: resolved.sceneSrc,
     maxTimelineTime: resolved.maxTimelineTime,
+    ...(starterInput.cameraPathProjectionId
+      ? { cameraPathProjectionId: starterInput.cameraPathProjectionId }
+      : {}),
     ui: resolved.ui,
     projections: resolved.projections
   }

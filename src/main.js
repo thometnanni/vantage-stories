@@ -30,7 +30,8 @@ class VantageRenderer extends HTMLElement {
     'follow-focus',
     'show-camera-frame',
     'controls',
-    'time'
+    'time',
+    'background-color'
   ]
 
   async attributeChangedCallback(name, _oldValue, newValue) {
@@ -77,6 +78,13 @@ class VantageRenderer extends HTMLElement {
           element.updateTime(value)
         })
         break
+      case 'background-color':
+        if (typeof value === 'string' && value.trim().length > 0) {
+          this.renderer.setClearColor(value, 1)
+        } else {
+          this.renderer.setClearColor(0x000000, 0)
+        }
+        break
       default:
         break
     }
@@ -84,6 +92,7 @@ class VantageRenderer extends HTMLElement {
 
   async connectedCallback() {
     this.renderer.setPixelRatio(window.devicePixelRatio)
+    this.renderer.setClearColor(0x000000, 0)
 
     const shadow = this.attachShadow({ mode: 'open' })
 

@@ -43,18 +43,14 @@ Files To Edit
 
 - `static/data/<folder>/story.json` (story content, projections, keyframes, asset paths)
 - `src/routes/+page.svelte` (index layout)
-- `src/lib/components/Story.svelte` (story presenter/controller)
-- `src/lib/components/SceneDescription.svelte` (context text panel)
-- `src/lib/components/TimelineControls.svelte` (timeline buttons/labels)
+- `src/lib/components/Scene.svelte` (scene presenter/controller)
+- `src/lib/components/Header.svelte` (intro/header section)
+- `src/lib/components/Footer.svelte` (credits/footer section)
 
 Architecture
 ----------
 
 - `src/lib/story/core/storyData.js`: story normalization and projection defaults
-- `src/lib/story/core/projectionLibrary.js`: reusable projection/timeline selectors
 - `src/lib/story/runtime/assetPaths.js`: base-path aware asset URL mapping
 - `src/lib/story/runtime/storySource.js`: story JSON loading/validation
-- `src/lib/story/three/storyCameraBridge.js`: camera transition + overview bridge to Three/Vantage renderer
-- `src/lib/components/Story.svelte`: UI orchestration layer using the modules above
-
-This separation lets you keep the same story JSON and swap only the presenter (e.g. classic scrollytelling) while reusing `core` + `runtime` logic.
+- `src/lib/components/Scene.svelte`: UI orchestration layer using the modules above

@@ -29,14 +29,4 @@ const mapProjectionAssetsWithBase = (projections, basePath = '') => {
   }))
 }
 
-const mapCameraTracksWithBase = (cameraTracks, basePath = '') => {
-  if (!Array.isArray(cameraTracks)) return []
-
-  return cameraTracks.map((camera) => ({
-    ...camera,
-    src: withBasePath(camera.src, basePath),
-    previewSrc: withBasePath(camera.previewSrc, basePath)
-  }))
-}
-
-export { REMOTE_ASSET_PATTERN, mapCameraTracksWithBase, mapProjectionAssetsWithBase, withBasePath }
+export { REMOTE_ASSET_PATTERN, mapProjectionAssetsWithBase, withBasePath }

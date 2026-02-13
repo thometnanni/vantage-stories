@@ -3,6 +3,21 @@ const toFiniteNumber = (value, fallback = 0) => {
   return Number.isFinite(parsed) ? parsed : fallback
 }
 
+const toBoolean = (value, fallback = false) => {
+  if (typeof value === 'boolean') return value
+  if (typeof value !== 'string') return fallback
+
+  const normalized = value.trim().toLowerCase()
+  if (normalized === '' || normalized === 'true' || normalized === '1' || normalized === 'yes') {
+    return true
+  }
+  if (normalized === 'false' || normalized === '0' || normalized === 'no') {
+    return false
+  }
+
+  return fallback
+}
+
 const DEFAULT_UI = {
   pageTitle: 'Vantage Story',
   header: {
@@ -20,6 +35,18 @@ const DEFAULT_UI = {
     symbol: '©',
     label: 'OpenStreetMap contributors',
     href: 'https://www.openstreetmap.org/copyright'
+  },
+  theme: {
+    pageBg: '#ececec',
+    sceneBg: '#ececec',
+    panelFill: 'rgba(245,245,245,0.92)',
+    panelStroke: '#f1f1f1',
+    text: '#0f172a',
+    mutedText: '#475569',
+    accent: '#01ff00',
+    contextBg: '#f6f1e8',
+    contextText: '#1a1a1a',
+    contextMuted: '#3d3d3d'
   }
 }
 
@@ -29,13 +56,98 @@ const toStringOrFallback = (value, fallback) => {
   return normalized.length > 0 ? normalized : fallback
 }
 
+const normalizeVectorString = (value) => {
+  if (Array.isArray(value)) {
+    return value.map((item) => toFiniteNumber(item, 0)).join(' ')
+  }
+
+  const normalized = toTrimmedString(value)
+  if (normalized.length === 0) return normalized
+  return normalized.replaceAll(',', ' ').replace(/\s+/g, ' ').trim()
+}
+
+const normalizeContext = (value) => {
+  const asString = toTrimmedString(value)
+  if (asString.length > 0) {
+    return { markdown: asString }
+  }
+
+  if (!value || typeof value !== 'object') return null
+
+  const title = toTrimmedString(value.title)
+  const markdown = toTrimmedString(
+    value.markdown ??
+      value.text ??
+      value.body ??
+      value.comment ??
+      value.notes
+  )
+
+  if (title.length === 0 && markdown.length === 0) return null
+
+  return {
+    ...(title.length > 0 ? { title } : {}),
+    ...(markdown.length > 0 ? { markdown } : {})
+  }
+}
+
+const keyframeHasCameraPose = (keyframe) => {
+  const position = normalizeVectorString(keyframe?.position)
+  const rotation = normalizeVectorString(keyframe?.rotation)
+  return position.length > 0 && rotation.length > 0
+}
+
+const normalizeKeyframe = (keyframe, index) => {
+  const normalized = {
+    ...keyframe,
+    time: toFiniteNumber(keyframe.time, index)
+  }
+
+  const position = normalizeVectorString(keyframe.position)
+  const rotation = normalizeVectorString(keyframe.rotation)
+
+  if (position.length > 0) normalized.position = position
+  if (rotation.length > 0) normalized.rotation = rotation
+
+  const context =
+    normalizeContext(keyframe.context) ??
+    normalizeContext({
+      title: keyframe.commentTitle ?? keyframe.title,
+      markdown: keyframe.comment ?? keyframe.notes ?? keyframe.text ?? keyframe.markdown
+    })
+  if (context) normalized.context = context
+  else delete normalized.context
+
+  return normalized
+}
+
 const toAbsoluteAssetPath = (value) => {
   const normalized = toTrimmedString(value)
   if (normalized.length === 0) return ''
   if (/^(https?:|data:|blob:|\/\/|file:)/i.test(normalized)) return normalized
 
-  const withoutLeading = normalized.replace(/^\.\//, '').replace(/^\/+/, '')
-  return `/${withoutLeading}`
+  const queryIndex = normalized.indexOf('?')
+  const hashIndex = normalized.indexOf('#')
+  const splitIndex = [queryIndex, hashIndex]
+    .filter((index) => index >= 0)
+    .sort((a, b) => a - b)[0]
+
+  const basePath = splitIndex == null ? normalized : normalized.slice(0, splitIndex)
+  const suffix = splitIndex == null ? '' : normalized.slice(splitIndex)
+  const withoutLeading = basePath.replace(/^\.\//, '').replace(/^\/+/, '')
+
+  const slashIndex = withoutLeading.lastIndexOf('/')
+  const directory = slashIndex >= 0 ? withoutLeading.slice(0, slashIndex + 1) : ''
+  let filename = slashIndex >= 0 ? withoutLeading.slice(slashIndex + 1) : withoutLeading
+
+  const token = 'live_view_upload-'
+  const first = filename.indexOf(token)
+  const second = first >= 0 ? filename.indexOf(token, first + token.length) : -1
+  if (second > 0) {
+    filename = filename.slice(second)
+  }
+
+  return `/${directory}${filename}${suffix}`
 }
 
 const resolveUiConfig = (ui) => {
@@ -45,6 +157,7 @@ const resolveUiConfig = (ui) => {
   const context = toSection(source.context)
   const renderer = toSection(source.renderer)
   const credits = toSection(source.credits)
+  const theme = toSection(source.theme)
 
   return {
     pageTitle: toStringOrFallback(source.pageTitle, DEFAULT_UI.pageTitle),
@@ -63,6 +176,27 @@ const resolveUiConfig = (ui) => {
       symbol: toStringOrFallback(credits.symbol, DEFAULT_UI.credits.symbol),
       label: toStringOrFallback(credits.label, DEFAULT_UI.credits.label),
       href: toStringOrFallback(credits.href, DEFAULT_UI.credits.href)
+    },
+    theme: {
+      pageBg: toStringOrFallback(theme.pageBg, DEFAULT_UI.theme.pageBg),
+      sceneBg: toStringOrFallback(theme.sceneBg, DEFAULT_UI.theme.sceneBg),
+      panelFill: toStringOrFallback(theme.panelFill, DEFAULT_UI.theme.panelFill),
+      panelStroke: toStringOrFallback(theme.panelStroke, DEFAULT_UI.theme.panelStroke),
+      text: toStringOrFallback(theme.text, DEFAULT_UI.theme.text),
+      mutedText: toStringOrFallback(theme.mutedText, DEFAULT_UI.theme.mutedText),
+      accent: toStringOrFallback(theme.accent, DEFAULT_UI.theme.accent),
+      contextBg: toStringOrFallback(
+        theme.contextBg,
+        toStringOrFallback(theme.pageBg, DEFAULT_UI.theme.contextBg)
+      ),
+      contextText: toStringOrFallback(
+        theme.contextText,
+        toStringOrFallback(theme.text, DEFAULT_UI.theme.contextText)
+      ),
+      contextMuted: toStringOrFallback(
+        theme.contextMuted,
+        toStringOrFallback(theme.mutedText, DEFAULT_UI.theme.contextMuted)
+      )
     }
   }
 }
@@ -73,6 +207,10 @@ const normalizeProjection = (projection, index) => {
   const startTime = toFiniteNumber(projection.startTime, time)
   const src = toAbsoluteAssetPath(projection.src)
   const previewSrc = toAbsoluteAssetPath(projection.previewSrc) || src
+  const keyframes = Array.isArray(projection.keyframes)
+    ? projection.keyframes.map((keyframe, keyframeIndex) => normalizeKeyframe(keyframe, keyframeIndex))
+    : []
+  const context = normalizeContext(projection.context)
 
   return {
     ...projection,
@@ -83,8 +221,11 @@ const normalizeProjection = (projection, index) => {
     projectionType: projection.projectionType ?? 'perspective',
     time,
     startTime,
+    focus: toBoolean(projection.focus, false),
+    cameraPath: projection.cameraPath === true,
     cameraSelectable: projection.cameraSelectable !== false,
-    keyframes: Array.isArray(projection.keyframes) ? projection.keyframes : []
+    ...(context ? { context } : {}),
+    keyframes
   }
 }
 
@@ -100,7 +241,235 @@ const deriveMaxTimeline = (projections) => {
   return Math.max(0, ...values)
 }
 
-const isVideoSource = (source = '') => /\.(mp4|webm|ogg)(\?.*)?$/i.test(source)
+const buildHiddenPathKeyframe = (keyframe, time) => {
+  const base = {
+    ...keyframe,
+    time,
+    opacity: 0,
+    screen: false
+  }
+
+  if (!keyframeHasCameraPose(base)) {
+    delete base.position
+    delete base.rotation
+  }
+
+  return base
+}
+
+const ensurePathTimes = (keyframes) => {
+  if (keyframes.length <= 1) return keyframes
+
+  const sorted = [...keyframes].sort(
+    (a, b) => toFiniteNumber(a.time, 0) - toFiniteNumber(b.time, 0)
+  )
+
+  const uniqueTimes = new Set(sorted.map((keyframe) => toFiniteNumber(keyframe.time, 0).toFixed(6))).size
+  if (uniqueTimes <= 1) {
+    return sorted.map((keyframe, index) => ({ ...keyframe, time: index }))
+  }
+
+  let previous = toFiniteNumber(sorted[0].time, 0)
+  return sorted.map((keyframe, index) => {
+    if (index === 0) return { ...keyframe, time: previous }
+    const candidate = toFiniteNumber(keyframe.time, previous + 0.001)
+    const time = candidate <= previous ? previous + 0.001 : candidate
+    previous = time
+    return { ...keyframe, time }
+  })
+}
+
+const withStableProjectionOrder = (projections) =>
+  projections
+    .map((projection, index) => ({ projection, index }))
+    .sort((a, b) => {
+      const byStart = toFiniteNumber(a.projection.startTime, 0) - toFiniteNumber(b.projection.startTime, 0)
+      if (Math.abs(byStart) > 1e-6) return byStart
+      return a.index - b.index
+    })
+    .map(({ projection }) => projection)
+
+const buildRecordedCameraPathProjection = (projection) => {
+  if (!projection || projection.projectionType !== 'perspective') return null
+
+  const cameraKeyframes = projection.keyframes
+    .filter((keyframe) => keyframeHasCameraPose(keyframe))
+    .map((keyframe) =>
+      buildHiddenPathKeyframe(keyframe, toFiniteNumber(keyframe.time, 0) + toFiniteNumber(projection.time, 0))
+    )
+
+  if (cameraKeyframes.length === 0) return null
+
+  const keyframes = ensurePathTimes(cameraKeyframes)
+  const src = projection.src || projection.previewSrc
+
+  return {
+    ...projection,
+    id: projection.id,
+    label: projection.label ?? 'Camera Path',
+    src,
+    previewSrc: projection.previewSrc || src,
+    projectionType: 'perspective',
+    time: 0,
+    startTime: 0,
+    cameraSelectable: false,
+    cameraPath: true,
+    focus: true,
+    opacity: 0,
+    keyframes
+  }
+}
+
+const buildCameraSequencePathProjection = (projections) => {
+  const sources = withStableProjectionOrder(
+    projections.filter(
+      (projection) =>
+        projection.projectionType === 'perspective' &&
+        projection.cameraSelectable !== false &&
+        projection.keyframes.some((keyframe) => keyframeHasCameraPose(keyframe))
+    )
+  )
+
+  if (sources.length === 0) return null
+
+  const keyframes = sources.map((projection, index) => {
+    const keyframeWithPose = projection.keyframes.find((keyframe) => keyframeHasCameraPose(keyframe))
+    const context = normalizeContext(keyframeWithPose?.context) ?? normalizeContext(projection.context)
+
+    return {
+      ...buildHiddenPathKeyframe(keyframeWithPose, index),
+      ...(context ? { context } : {})
+    }
+  })
+
+  const first = sources[0]
+  const src = first.src || first.previewSrc
+
+  return {
+    id: 'camera-path',
+    label: 'Camera Path',
+    src,
+    previewSrc: first.previewSrc || src,
+    projectionType: 'perspective',
+    time: 0,
+    startTime: 0,
+    cameraSelectable: false,
+    cameraPath: true,
+    focus: true,
+    opacity: 0,
+    keyframes
+  }
+}
+
+const deriveCameraPathProjection = (input, projections) => {
+  const preferredId = toTrimmedString(input.cameraPathProjectionId)
+
+  const byId = preferredId.length > 0 ? projections.find((projection) => projection.id === preferredId) : null
+  const flagged = projections.find((projection) => projection.cameraPath === true)
+  const focused = projections.find(
+    (projection) =>
+      projection.focus === true &&
+      projection.projectionType === 'perspective' &&
+      projection.keyframes.some((keyframe) => keyframeHasCameraPose(keyframe))
+  )
+  const mostKeyframes = projections
+    .filter(
+      (projection) =>
+        projection.projectionType === 'perspective' &&
+        projection.keyframes.some((keyframe) => keyframeHasCameraPose(keyframe))
+    )
+    .sort((a, b) => b.keyframes.length - a.keyframes.length)[0]
+
+  const preferred = byId ?? flagged ?? focused ?? mostKeyframes ?? null
+  const recordedPath = preferred ? buildRecordedCameraPathProjection(preferred) : null
+  if (recordedPath && recordedPath.keyframes.length >= 2) return recordedPath
+
+  const sequencePath = buildCameraSequencePathProjection(projections)
+  if (sequencePath) return sequencePath
+
+  return recordedPath
+}
+
+const deriveCameraPathRange = (cameraPathProjection, fallbackMaxTimeline) => {
+  const fallbackEnd = Math.max(1, toFiniteNumber(fallbackMaxTimeline, 1))
+  if (!cameraPathProjection || !Array.isArray(cameraPathProjection.keyframes)) {
+    return { start: 0, end: fallbackEnd, duration: fallbackEnd }
+  }
+
+  const times = cameraPathProjection.keyframes
+    .map((keyframe) => toFiniteNumber(keyframe.time, Number.NaN))
+    .filter((value) => Number.isFinite(value))
+
+  if (times.length === 0) {
+    return { start: 0, end: fallbackEnd, duration: fallbackEnd }
+  }
+
+  const start = Math.min(...times)
+  const endRaw = Math.max(...times)
+  const end = endRaw > start ? endRaw : start + fallbackEnd
+
+  return {
+    start,
+    end,
+    duration: Math.max(1e-6, end - start)
+  }
+}
+
+const normalizeNarrativeMoment = (moment, index, range) => {
+  const context =
+    normalizeContext(moment.context) ??
+    normalizeContext({
+      title: moment.commentTitle ?? moment.title,
+      markdown: moment.comment ?? moment.notes ?? moment.text ?? moment.markdown
+    })
+  const providedTime = Number(moment.time ?? moment.at)
+  const providedProgress = Number(moment.progress)
+  const fallbackProgress = index === 0 ? 0 : index / Math.max(1, range.count - 1)
+  const progress = Number.isFinite(providedProgress)
+    ? Math.max(0, Math.min(1, providedProgress))
+    : fallbackProgress
+  const time = Number.isFinite(providedTime)
+    ? providedTime
+    : range.start + progress * range.duration
+
+  return {
+    id: toTrimmedString(moment.id) || `moment-${index + 1}`,
+    time,
+    progress: Math.max(0, Math.min(1, (time - range.start) / range.duration)),
+    context
+  }
+}
+
+const deriveNarrativeMoments = (input, cameraPathProjection, range) => {
+  const explicitMoments = Array.isArray(input?.narrative?.moments)
+    ? input.narrative.moments
+    : Array.isArray(input?.moments)
+      ? input.moments
+      : []
+
+  if (explicitMoments.length > 0) {
+    const normalized = explicitMoments.map((moment, index) =>
+      normalizeNarrativeMoment(moment, index, { ...range, count: explicitMoments.length })
+    )
+    return normalized.sort((a, b) => a.time - b.time)
+  }
+
+  if (!cameraPathProjection || !Array.isArray(cameraPathProjection.keyframes)) {
+    return []
+  }
+
+  const keyframeMoments = cameraPathProjection.keyframes.map((keyframe, index) => {
+    const time = toFiniteNumber(keyframe.time, range.start)
+    return {
+      id: `moment-${index + 1}`,
+      time,
+      progress: Math.max(0, Math.min(1, (time - range.start) / range.duration)),
+      context: normalizeContext(keyframe.context)
+    }
+  })
+
+  return keyframeMoments
+}
 
 const resolveStoryData = (data = {}) => {
   const projections = (Array.isArray(data.projections) ? data.projections : []).map(
@@ -112,14 +481,28 @@ const resolveStoryData = (data = {}) => {
     .sort((a, b) => a.startTime - b.startTime)
 
   const derivedMaxTimeline = deriveMaxTimeline(projections)
+  const cameraPathProjection = deriveCameraPathProjection(data, projections)
+  const cameraPathRange = deriveCameraPathRange(
+    cameraPathProjection,
+    Math.max(derivedMaxTimeline, toFiniteNumber(data.maxTimelineTime, 0))
+  )
+  const narrativeMoments = deriveNarrativeMoments(data, cameraPathProjection, cameraPathRange)
 
   return {
     sceneSrc: toAbsoluteAssetPath(data.sceneSrc),
-    maxTimelineTime: toFiniteNumber(data.maxTimelineTime, derivedMaxTimeline),
+    maxTimelineTime: Math.max(
+      toFiniteNumber(data.maxTimelineTime, 0),
+      derivedMaxTimeline,
+      cameraPathRange.end
+    ),
     projections,
     cameraTracks,
+    cameraPathProjectionId: cameraPathProjection?.id ?? '',
+    cameraPathProjection,
+    cameraPathRange,
+    narrativeMoments,
     ui: resolveUiConfig(data.ui)
   }
 }
 
-export { deriveMaxTimeline, isVideoSource, normalizeProjection, resolveStoryData, toAbsoluteAssetPath }
+export { resolveStoryData }

@@ -1,7 +1,7 @@
 <script>
-  import Story from '$lib/components/Story.svelte'
+  import Scene from '$lib/components/Scene.svelte'
 
   let { data } = $props()
 </script>
 
-<Story storyPath={data.story.storyPath} />
+<Scene storyPath={data.story.storyPath} />
