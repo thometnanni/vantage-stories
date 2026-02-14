@@ -13,7 +13,7 @@ build
 dist-ssr
 .svelte-kit
 *.local
-
+story-catalog.js
 static/data/*
 
 # Editor directories and files
