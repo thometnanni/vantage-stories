@@ -38,78 +38,10 @@ body {
   box-shadow: var(--tiny-shadow);
 }
 
-.story-richtext {
-  line-height: 1.45;
-}
-
-.story-richtext p {
-  margin: 0;
-}
-
-.story-richtext p + p,
-.story-richtext p + ul,
-.story-richtext p + ol,
-.story-richtext p + blockquote,
-.story-richtext ul + p,
-.story-richtext ol + p,
-.story-richtext blockquote + p,
-.story-richtext h1 + p,
-.story-richtext h2 + p,
-.story-richtext h3 + p,
-.story-richtext h4 + p {
-  margin-top: 0.5rem;
-}
-
-.story-richtext h1,
-.story-richtext h2,
-.story-richtext h3,
-.story-richtext h4 {
-  margin: 0.2rem 0 0;
-  font-weight: 400;
-  line-height: 1.3;
-  color: #0f172a;
-}
-
-.story-richtext h1 {
-  font-size: 1.3em;
-}
-
-.story-richtext h2 {
-  font-size: 1.18em;
-}
-
-.story-richtext h3,
-.story-richtext h4 {
-  font-size: 1.06em;
-}
-
-.story-richtext ul,
-.story-richtext ol {
-  margin: 0.4rem 0 0;
-  padding-left: 1.1rem;
-}
-
-.story-richtext li + li {
-  margin-top: 0.2rem;
-}
-
-.story-richtext blockquote {
-  margin: 0.55rem 0 0;
-  border-left: 2px solid #94a3b8;
-  padding-left: 0.55rem;
-  color: #334155;
-}
-
 .story-richtext a {
-  color: #0f172a;
   text-decoration: underline;
-  text-underline-offset: 2px;
 }
 
-.story-richtext code {
-  font-family: inherit;
-  font-size: 0.95em;
-  background: rgba(15, 23, 42, 0.08);
-  border-radius: 4px;
-  padding: 0.05rem 0.25rem;
+.story-richtext p ~ p {
+  margin-top: 1em;
 }

@@ -58,7 +58,123 @@
   const normalizeText = (value) => (typeof value === 'string' ? value.trim() : '')
   const toAttribute = (value) => (value == null ? undefined : String(value))
   const clamp = (value, min, max) => Math.min(max, Math.max(min, value))
+  const toPositiveNumber = (value, fallback = 0) => {
+    const parsed = Number(value)
+    return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback
+  }
   let theme = $derived(ui.theme ?? {})
+
+  let scrollTimingPoints = $derived.by(() => {
+    const keyframes = Array.isArray(cameraPathProjection?.keyframes)
+      ? [...cameraPathProjection.keyframes]
+          .map((keyframe) => ({
+            time: Number(keyframe?.time),
+            scrollWeight: toPositiveNumber(keyframe?.scrollWeight, 1),
+            pause: toPositiveNumber(keyframe?.pause, 0)
+          }))
+          .filter((keyframe) => Number.isFinite(keyframe.time))
+          .sort((a, b) => a.time - b.time)
+      : []
+
+    if (keyframes.length === 0) {
+      return [
+        { progress: 0, time: cameraPathRange.start },
+        { progress: 1, time: cameraPathRange.end }
+      ]
+    }
+
+    if (keyframes.length === 1) {
+      return [
+        { progress: 0, time: keyframes[0].time },
+        { progress: 1, time: keyframes[0].time }
+      ]
+    }
+
+    const weightedPoints = [{ weight: 0, time: keyframes[0].time }]
+    let totalWeight = 0
+
+    for (let index = 0; index < keyframes.length; index += 1) {
+      const keyframe = keyframes[index]
+
+      if (keyframe.pause > 0) {
+        totalWeight += keyframe.pause
+        weightedPoints.push({ weight: totalWeight, time: keyframe.time })
+      }
+
+      const next = keyframes[index + 1]
+      if (!next) continue
+
+      totalWeight += keyframe.scrollWeight
+      weightedPoints.push({ weight: totalWeight, time: next.time })
+    }
+
+    if (totalWeight <= 1e-6) {
+      return [
+        { progress: 0, time: keyframes[0].time },
+        { progress: 1, time: keyframes[keyframes.length - 1].time }
+      ]
+    }
+
+    const points = weightedPoints.map((point) => ({
+      progress: point.weight / totalWeight,
+      time: point.time
+    }))
+
+    points[0].progress = 0
+    points[points.length - 1].progress = 1
+    return points
+  })
+
+  const timeFromScrollProgress = (progress) => {
+    const points = scrollTimingPoints
+    if (!Array.isArray(points) || points.length === 0) {
+      return cameraPathRange.start + clamp(progress, 0, 1) * cameraPathRange.duration
+    }
+
+    const value = clamp(progress, 0, 1)
+    if (value <= points[0].progress) return points[0].time
+    if (value >= points[points.length - 1].progress) return points[points.length - 1].time
+
+    for (let index = 0; index < points.length - 1; index += 1) {
+      const start = points[index]
+      const end = points[index + 1]
+      if (value >= start.progress && value <= end.progress) {
+        const span = Math.max(1e-6, end.progress - start.progress)
+        const t = (value - start.progress) / span
+        return start.time + t * (end.time - start.time)
+      }
+    }
+
+    return points[points.length - 1].time
+  }
+
+  const scrollProgressFromTime = (time) => {
+    const points = scrollTimingPoints
+    const targetTime = Number(time)
+
+    if (!Number.isFinite(targetTime)) return 0
+
+    if (!Array.isArray(points) || points.length === 0) {
+      return clamp((targetTime - cameraPathRange.start) / cameraPathRange.duration, 0, 1)
+    }
+
+    if (targetTime <= points[0].time) return points[0].progress
+    if (targetTime >= points[points.length - 1].time) return points[points.length - 1].progress
+
+    for (let index = 0; index < points.length - 1; index += 1) {
+      const start = points[index]
+      const end = points[index + 1]
+      const minTime = Math.min(start.time, end.time)
+      const maxTime = Math.max(start.time, end.time)
+      if (targetTime < minTime || targetTime > maxTime) continue
+      if (Math.abs(end.time - start.time) <= 1e-6) return start.progress
+
+      const t = (targetTime - start.time) / (end.time - start.time)
+      return clamp(start.progress + t * (end.progress - start.progress), 0, 1)
+    }
+
+    return points[points.length - 1].progress
+  }
 
   let introText = $derived.by(() => {
     const contextIntro = normalizeText(ui?.context?.introText)
@@ -77,7 +193,7 @@
       return {
         id: moment?.id ?? `moment-${index + 1}`,
         time: Number(moment?.time) || 0,
-        progress: clamp(Number(moment?.progress) || 0, 0, 1),
+        progress: scrollProgressFromTime(Number(moment?.time)),
         title,
         html,
         hasContent
@@ -152,14 +268,26 @@
       })
       .filter(Boolean)
 
-    if (anchors.length === 0) return null
+    const sceneTop = scrollTrack?.offsetTop ?? 0
+    const sceneStartCenter = sceneTop + window.innerHeight * 0.5
+    const sceneEndCenter =
+      sceneTop + (scrollTrack?.offsetHeight ?? window.innerHeight) - window.innerHeight * 0.5
 
-    const sceneStartCenter = (scrollTrack?.offsetTop ?? 0) + window.innerHeight * 0.5
-    const controls = anchors.map((anchor, index) =>
-      index === 0 ? { ...anchor, center: sceneStartCenter } : anchor
-    )
-    if (controls.length > 1 && controls[0].center >= controls[1].center) {
-      controls[0].center = controls[1].center - 1
+    const controls = [
+      { center: sceneStartCenter, progress: 0 },
+      ...anchors,
+      {
+        center: Math.max(sceneStartCenter + 1, sceneEndCenter),
+        progress: 1
+      }
+    ]
+
+    if (controls.length <= 1) return null
+
+    for (let index = 1; index < controls.length; index += 1) {
+      if (controls[index].center <= controls[index - 1].center) {
+        controls[index].center = controls[index - 1].center + 1
+      }
     }
 
     if (centerY <= controls[0].center) return controls[0].progress
@@ -186,7 +314,7 @@
     if (timelineProgress != null) {
       const progress = clamp(timelineProgress, 0, 1)
       scrollProgress = progress
-      currentTime = cameraPathRange.start + progress * cameraPathRange.duration
+      currentTime = timeFromScrollProgress(progress)
       return
     }
 
@@ -198,7 +326,7 @@
     const progress = clamp(rawProgress, 0, 1)
 
     scrollProgress = progress
-    currentTime = cameraPathRange.start + progress * cameraPathRange.duration
+    currentTime = timeFromScrollProgress(progress)
   }
 
   const scheduleScrollSync = () => {

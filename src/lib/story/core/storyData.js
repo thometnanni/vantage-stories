@@ -19,9 +19,9 @@ const toBoolean = (value, fallback = false) => {
 }
 
 const DEFAULT_UI = {
-  pageTitle: 'Vantage Story',
+  pageTitle: 'Vantage',
   header: {
-    title: 'Vantage Story',
+    title: '',
     description: ''
   },
   context: {
@@ -32,21 +32,20 @@ const DEFAULT_UI = {
     loading: 'Loading renderer'
   },
   credits: {
-    symbol: '©',
-    label: 'OpenStreetMap contributors',
-    href: 'https://www.openstreetmap.org/copyright'
+    label:
+      '© OpenStreetMap contributors \n\n Realised with [Vantage](https://vantage.thometnanni.net/).'
   },
   theme: {
-    pageBg: '#ececec',
-    sceneBg: '#ececec',
-    panelFill: 'rgba(245,245,245,0.92)',
-    panelStroke: '#f1f1f1',
-    text: '#0f172a',
-    mutedText: '#475569',
-    accent: '#01ff00',
-    contextBg: '#f6f1e8',
-    contextText: '#1a1a1a',
-    contextMuted: '#3d3d3d'
+    pageBg: '#000',
+    sceneBg: '#000',
+    panelFill: '#000',
+    panelStroke: '#000',
+    text: '#fff',
+    mutedText: '#ccc',
+    accent: '#fff',
+    contextBg: '#000',
+    contextText: '#fff',
+    contextMuted: '#ccc'
   }
 }
 
@@ -76,11 +75,7 @@ const normalizeContext = (value) => {
 
   const title = toTrimmedString(value.title)
   const markdown = toTrimmedString(
-    value.markdown ??
-      value.text ??
-      value.body ??
-      value.comment ??
-      value.notes
+    value.markdown ?? value.text ?? value.body ?? value.comment ?? value.notes
   )
 
   if (title.length === 0 && markdown.length === 0) return null
@@ -109,6 +104,20 @@ const normalizeKeyframe = (keyframe, index) => {
   if (position.length > 0) normalized.position = position
   if (rotation.length > 0) normalized.rotation = rotation
 
+  const scrollWeight = toFiniteNumber(keyframe.scrollWeight ?? keyframe.scroll_weight, Number.NaN)
+  if (Number.isFinite(scrollWeight) && scrollWeight > 0) {
+    normalized.scrollWeight = scrollWeight
+  } else {
+    delete normalized.scrollWeight
+  }
+
+  const pause = toFiniteNumber(keyframe.pause ?? keyframe.pauseWeight ?? keyframe.hold, Number.NaN)
+  if (Number.isFinite(pause) && pause > 0) {
+    normalized.pause = pause
+  } else {
+    delete normalized.pause
+  }
+
   const context =
     normalizeContext(keyframe.context) ??
     normalizeContext({
@@ -128,9 +137,7 @@ const toAbsoluteAssetPath = (value) => {
 
   const queryIndex = normalized.indexOf('?')
   const hashIndex = normalized.indexOf('#')
-  const splitIndex = [queryIndex, hashIndex]
-    .filter((index) => index >= 0)
-    .sort((a, b) => a - b)[0]
+  const splitIndex = [queryIndex, hashIndex].filter((index) => index >= 0).sort((a, b) => a - b)[0]
 
   const basePath = splitIndex == null ? normalized : normalized.slice(0, splitIndex)
   const suffix = splitIndex == null ? '' : normalized.slice(splitIndex)
@@ -173,7 +180,6 @@ const resolveUiConfig = (ui) => {
       loading: toStringOrFallback(renderer.loading, DEFAULT_UI.renderer.loading)
     },
     credits: {
-      symbol: toStringOrFallback(credits.symbol, DEFAULT_UI.credits.symbol),
       label: toStringOrFallback(credits.label, DEFAULT_UI.credits.label),
       href: toStringOrFallback(credits.href, DEFAULT_UI.credits.href)
     },
@@ -208,7 +214,9 @@ const normalizeProjection = (projection, index) => {
   const src = toAbsoluteAssetPath(projection.src)
   const previewSrc = toAbsoluteAssetPath(projection.previewSrc) || src
   const keyframes = Array.isArray(projection.keyframes)
-    ? projection.keyframes.map((keyframe, keyframeIndex) => normalizeKeyframe(keyframe, keyframeIndex))
+    ? projection.keyframes.map((keyframe, keyframeIndex) =>
+        normalizeKeyframe(keyframe, keyframeIndex)
+      )
     : []
   const context = normalizeContext(projection.context)
 
@@ -231,8 +239,8 @@ const normalizeProjection = (projection, index) => {
 
 const deriveMaxTimeline = (projections) => {
   const values = projections.flatMap((projection) => {
-    const localTimes = projection.keyframes.map((keyframe) =>
-      toFiniteNumber(keyframe.time, 0) + projection.time
+    const localTimes = projection.keyframes.map(
+      (keyframe) => toFiniteNumber(keyframe.time, 0) + projection.time
     )
 
     return [projection.startTime, projection.time, ...localTimes]
@@ -264,7 +272,8 @@ const ensurePathTimes = (keyframes) => {
     (a, b) => toFiniteNumber(a.time, 0) - toFiniteNumber(b.time, 0)
   )
 
-  const uniqueTimes = new Set(sorted.map((keyframe) => toFiniteNumber(keyframe.time, 0).toFixed(6))).size
+  const uniqueTimes = new Set(sorted.map((keyframe) => toFiniteNumber(keyframe.time, 0).toFixed(6)))
+    .size
   if (uniqueTimes <= 1) {
     return sorted.map((keyframe, index) => ({ ...keyframe, time: index }))
   }
@@ -283,7 +292,8 @@ const withStableProjectionOrder = (projections) =>
   projections
     .map((projection, index) => ({ projection, index }))
     .sort((a, b) => {
-      const byStart = toFiniteNumber(a.projection.startTime, 0) - toFiniteNumber(b.projection.startTime, 0)
+      const byStart =
+        toFiniteNumber(a.projection.startTime, 0) - toFiniteNumber(b.projection.startTime, 0)
       if (Math.abs(byStart) > 1e-6) return byStart
       return a.index - b.index
     })
@@ -295,7 +305,10 @@ const buildRecordedCameraPathProjection = (projection) => {
   const cameraKeyframes = projection.keyframes
     .filter((keyframe) => keyframeHasCameraPose(keyframe))
     .map((keyframe) =>
-      buildHiddenPathKeyframe(keyframe, toFiniteNumber(keyframe.time, 0) + toFiniteNumber(projection.time, 0))
+      buildHiddenPathKeyframe(
+        keyframe,
+        toFiniteNumber(keyframe.time, 0) + toFiniteNumber(projection.time, 0)
+      )
     )
 
   if (cameraKeyframes.length === 0) return null
@@ -333,8 +346,11 @@ const buildCameraSequencePathProjection = (projections) => {
   if (sources.length === 0) return null
 
   const keyframes = sources.map((projection, index) => {
-    const keyframeWithPose = projection.keyframes.find((keyframe) => keyframeHasCameraPose(keyframe))
-    const context = normalizeContext(keyframeWithPose?.context) ?? normalizeContext(projection.context)
+    const keyframeWithPose = projection.keyframes.find((keyframe) =>
+      keyframeHasCameraPose(keyframe)
+    )
+    const context =
+      normalizeContext(keyframeWithPose?.context) ?? normalizeContext(projection.context)
 
     return {
       ...buildHiddenPathKeyframe(keyframeWithPose, index),
@@ -364,7 +380,8 @@ const buildCameraSequencePathProjection = (projections) => {
 const deriveCameraPathProjection = (input, projections) => {
   const preferredId = toTrimmedString(input.cameraPathProjectionId)
 
-  const byId = preferredId.length > 0 ? projections.find((projection) => projection.id === preferredId) : null
+  const byId =
+    preferredId.length > 0 ? projections.find((projection) => projection.id === preferredId) : null
   const flagged = projections.find((projection) => projection.cameraPath === true)
   const focused = projections.find(
     (projection) =>
@@ -415,6 +432,90 @@ const deriveCameraPathRange = (cameraPathProjection, fallbackMaxTimeline) => {
   }
 }
 
+const parseVector = (value) => {
+  const normalized = normalizeVectorString(value)
+  if (normalized.length === 0) return null
+  const parts = normalized.split(' ').map((item) => toFiniteNumber(item, Number.NaN))
+  if (parts.some((item) => !Number.isFinite(item))) return null
+  return parts
+}
+
+const angleDelta = (a, b) => {
+  const tau = Math.PI * 2
+  let delta = (a - b) % tau
+  if (delta > Math.PI) delta -= tau
+  if (delta < -Math.PI) delta += tau
+  return Math.abs(delta)
+}
+
+const poseDistance = (source, target) => {
+  if (!source || !target) return Number.POSITIVE_INFINITY
+  const sourcePos = parseVector(source.position)
+  const targetPos = parseVector(target.position)
+  const sourceRot = parseVector(source.rotation)
+  const targetRot = parseVector(target.rotation)
+  if (!sourcePos || !targetPos || !sourceRot || !targetRot) return Number.POSITIVE_INFINITY
+
+  const posDelta = Math.hypot(
+    sourcePos[0] - targetPos[0],
+    sourcePos[1] - targetPos[1],
+    sourcePos[2] - targetPos[2]
+  )
+  const rotDelta =
+    angleDelta(sourceRot[0], targetRot[0]) +
+    angleDelta(sourceRot[1], targetRot[1]) +
+    angleDelta(sourceRot[2], targetRot[2])
+
+  return posDelta + rotDelta * 20
+}
+
+const deriveProjectionContextMoments = (projections, cameraPathProjection, range) => {
+  if (!cameraPathProjection || !Array.isArray(cameraPathProjection.keyframes)) return []
+
+  const pathKeyframes = cameraPathProjection.keyframes
+    .map((keyframe) => ({
+      keyframe,
+      time: toFiniteNumber(keyframe.time, range.start)
+    }))
+    .filter(({ keyframe }) => keyframeHasCameraPose(keyframe))
+
+  if (pathKeyframes.length === 0) return []
+
+  const projectionContexts = (Array.isArray(projections) ? projections : [])
+    .filter(
+      (projection) =>
+        projection.projectionType === 'perspective' && projection.id !== cameraPathProjection.id
+    )
+    .map((projection) => {
+      const keyframeWithPose = projection.keyframes.find((keyframe) =>
+        keyframeHasCameraPose(keyframe)
+      )
+      const context =
+        normalizeContext(keyframeWithPose?.context) ?? normalizeContext(projection.context)
+      if (!keyframeWithPose || !context) return null
+
+      let best = null
+      for (const path of pathKeyframes) {
+        const distance = poseDistance(keyframeWithPose, path.keyframe)
+        if (!best || distance < best.distance) {
+          best = { ...path, distance }
+        }
+      }
+      if (!best) return null
+
+      return {
+        id: `moment-${projection.id}`,
+        time: best.time,
+        progress: Math.max(0, Math.min(1, (best.time - range.start) / range.duration)),
+        context
+      }
+    })
+    .filter(Boolean)
+    .sort((a, b) => a.time - b.time)
+
+  return projectionContexts
+}
+
 const normalizeNarrativeMoment = (moment, index, range) => {
   const context =
     normalizeContext(moment.context) ??
@@ -440,7 +541,7 @@ const normalizeNarrativeMoment = (moment, index, range) => {
   }
 }
 
-const deriveNarrativeMoments = (input, cameraPathProjection, range) => {
+const deriveNarrativeMoments = (input, cameraPathProjection, range, projections) => {
   const explicitMoments = Array.isArray(input?.narrative?.moments)
     ? input.narrative.moments
     : Array.isArray(input?.moments)
@@ -468,6 +569,34 @@ const deriveNarrativeMoments = (input, cameraPathProjection, range) => {
     }
   })
 
+  const keyframeContextMoments = keyframeMoments.filter((moment) => moment.context != null)
+  const projectionContextMoments = deriveProjectionContextMoments(
+    projections,
+    cameraPathProjection,
+    range
+  )
+
+  if (keyframeContextMoments.length > 0) {
+    if (projectionContextMoments.length === 0) return keyframeContextMoments
+
+    const EPSILON = 1e-4
+    const hasNearbyKeyframeContext = (time) =>
+      keyframeContextMoments.some(
+        (moment) => Math.abs(toFiniteNumber(moment.time, Number.NaN) - time) <= EPSILON
+      )
+
+    const merged = [
+      ...keyframeContextMoments,
+      ...projectionContextMoments.filter(
+        (moment) => !hasNearbyKeyframeContext(toFiniteNumber(moment.time, Number.NaN))
+      )
+    ].sort((a, b) => a.time - b.time)
+
+    return merged
+  }
+
+  if (projectionContextMoments.length > 0) return projectionContextMoments
+
   return keyframeMoments
 }
 
@@ -486,7 +615,12 @@ const resolveStoryData = (data = {}) => {
     cameraPathProjection,
     Math.max(derivedMaxTimeline, toFiniteNumber(data.maxTimelineTime, 0))
   )
-  const narrativeMoments = deriveNarrativeMoments(data, cameraPathProjection, cameraPathRange)
+  const narrativeMoments = deriveNarrativeMoments(
+    data,
+    cameraPathProjection,
+    cameraPathRange,
+    projections
+  )
 
   return {
     sceneSrc: toAbsoluteAssetPath(data.sceneSrc),
