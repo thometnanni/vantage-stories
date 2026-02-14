@@ -1,0 +1,441 @@
+{
+  "sceneSrc": "/data/silber/live_view_upload-1770996775-813424911167-1-scene.gltf",
+  "maxTimelineTime": 52.465628551483164,
+  "cameraPathProjectionId": "6c79e15e-ed6a-44ba-9ca2-768a43894a6c",
+  "ui": {
+    "pageTitle": "Silbersteinstraße Graffitis 1983",
+    "header": {
+      "title": "Silbersteinstraße Graffitis 1983",
+      "description": ""
+    },
+    "context": {
+      "introText": "",
+      "emptyText": "No context for this keyframe."
+    },
+    "renderer": {
+      "loading": "Loading renderer"
+    },
+    "credits": {
+      "label": "© OpenStreetMap contributors, Petra Gall 1983. \n\n Realised with [Vantage](https://vantage.thometnanni.net/)."
+    },
+    "theme": {
+      "pageBg": "#000",
+      "sceneBg": "#000",
+      "panelFill": "#000",
+      "panelStroke": "#fff",
+      "text": "#fff",
+      "mutedText": "#fff",
+      "accent": "red"
+    }
+  },
+  "projections": [
+    {
+      "id": "39ef5ce4-8d0a-4630-ba90-346663993cee",
+      "src": "/data/silber/live_view_upload-1770991716-159346052917-1-map%20copy.png",
+      "projectionType": "map",
+      "time": 0,
+      "cameraSelectable": false,
+      "keyframes": [
+        {
+          "time": 0,
+          "opacity": 1
+        }
+      ],
+      "label": "39ef5ce4-8d0a-4630-ba90-346663993cee",
+      "previewSrc": "/data/silber/live_view_upload-1770991716-159346052917-1-map%20copy.png",
+      "startTime": 0,
+      "focus": false,
+      "cameraPath": false
+    },
+    {
+      "id": "6c79e15e-ed6a-44ba-9ca2-768a43894a6c",
+      "src": "/data/silber/live_view_upload-1770996465-338591261704-1-1_silbersteinstraSse-graffitis-1983-k1-n13-2023-09-18-124198-9196.jpg",
+      "projectionType": "perspective",
+      "time": 0,
+      "cameraSelectable": false,
+      "keyframes": [
+        {
+          "time": 0,
+          "position": "0.0 700.0 0.0",
+          "rotation": "-1.5499999701982028 -0.5490382858374622 -2.311169272483093e-14",
+          "fov": 80,
+          "far": 0,
+          "opacity": 0,
+          "screen": true,
+          "context": {
+            "markdown": "Susanne Matthes was very young, only 22 years old, when her life was violently taken by a stranger who was the same age as her and, like her, lived on Silbersteinstraße in Neukölln. \n\n They did not know each other. The murder of Susanne Matthes on 23 November 1983 was the nightmare of everyone who dreams of being attacked, raped and murdered in the dark by a stranger. \n\n This Map displays all the graffitis in the Silbersteinstraße that were painted in 1983. \n\n Photographed by Petra Gall."
+          }
+        },
+        {
+          "time": 0.6810344827586207,
+          "position": "2.1310953296564765 1.500000000000341 -7.5531277784592135",
+          "rotation": "0.07000002980217682 1.7720000000000968 -2.464878782550049e-14",
+          "fov": 80,
+          "far": 0,
+          "opacity": 0,
+          "screen": true
+        },
+        {
+          "time": 1.146551724137931,
+          "position": "-39.94224751143034 1.500000000000313 -10.360673922178325",
+          "rotation": "0.08741731036199964 0.6340751066523009 -2.4733280113344483e-14",
+          "fov": 82.85,
+          "far": 0,
+          "opacity": 0,
+          "screen": true,
+          "context": {
+            "markdown": "Call them rapists."
+          }
+        },
+        {
+          "time": 1.2155172413793103,
+          "position": "-47.94335482488111 1.5000000000003089 -8.05691579420395",
+          "rotation": "0.11525690748197183 2.111938085415588 -2.4776413550633313e-14",
+          "fov": 80,
+          "far": 0,
+          "opacity": 0,
+          "screen": true
+        },
+        {
+          "time": 5.163793103448276,
+          "position": "-323.85004888831685 1.500000000000119 51.24786629052826",
+          "rotation": "0.0652284979130302 1.4532832868404506 -2.4692958352213997e-14",
+          "fov": 80,
+          "far": 0,
+          "opacity": 0,
+          "screen": true
+        },
+        {
+          "time": 5.482758620689655,
+          "position": "-350.91773507942685 1.5000000000001037 52.01445154961195",
+          "rotation": "0.05318690150680571 0.18607318302543 -2.4686581104675547e-14",
+          "fov": 80,
+          "far": 0,
+          "opacity": 0,
+          "screen": true,
+          "context": {
+            "markdown": "Susanne murdered, arm yourselves."
+          }
+        },
+        {
+          "time": 5.586206896551724,
+          "position": "-362.9389978119852 1.5000000000000988 64.95941339364612",
+          "rotation": "0.07999393166498345 2.161259847434004 -2.450277929896305e-14",
+          "fov": 83.09999999999997,
+          "far": 0,
+          "opacity": 0,
+          "screen": true,
+          "context": {
+            "markdown": "Men murder everywhere."
+          }
+        },
+        {
+          "time": 5.8275862068965525,
+          "position": "-379.6887019726042 1.5000000000000873 56.770292635771",
+          "rotation": "0.10081817850465317 0.26346457126531164 -2.452170534305632e-14",
+          "fov": 82.73529411764703,
+          "far": 0,
+          "opacity": 0,
+          "screen": true,
+          "context": {
+            "markdown": "Women defend yourselves."
+          }
+        },
+        {
+          "time": 5.991379310344827,
+          "position": "-390.2793782419787 1.5000000000000793 59.63297534165311",
+          "rotation": "0.09802986981252437 1.8325957145940461 -2.4533203281944127e-14",
+          "fov": 82.48781512605039,
+          "far": 0,
+          "opacity": 0,
+          "screen": true
+        },
+        {
+          "time": 6.56896551724138,
+          "position": "-428.0238922902819 1.5000000000000515 66.75723189619016",
+          "rotation": "0.05219741284554372 0.1313396262286316 -2.4610528990491148e-14",
+          "fov": 81.61512605042014,
+          "far": 0,
+          "opacity": 0,
+          "screen": true,
+          "context": {
+            "markdown": "Men murder."
+          }
+        },
+        {
+          "time": 6.655172413793103,
+          "position": "-433.56579976283183 1.5000000000000473 68.50346076837725",
+          "rotation": "0.053633107761401205 1.8325957145940461 -2.4613614380411256e-14",
+          "fov": 81.48487394957981,
+          "far": 0,
+          "opacity": 0,
+          "screen": true
+        },
+        {
+          "time": 7.025862068965517,
+          "position": "-469.55635386381454 1.5000000000000295 77.05587555817063",
+          "rotation": "0.05180659589958833 1.261739436282297 -2.4642150678486132e-14",
+          "fov": 80.92478991596637,
+          "far": 0,
+          "opacity": 0,
+          "screen": true,
+          "context": {
+            "markdown": "From 8 PM curfew for men."
+          }
+        },
+        {
+          "time": 7.198275862068966,
+          "position": "-475.94728554032497 1.5000000000000213 83.63926816223116",
+          "rotation": "-0.24506849314193627 -2.285710500835965 -2.462924397371769e-14",
+          "fov": 80.6642857142857,
+          "far": 0,
+          "opacity": 0,
+          "screen": true
+        },
+        {
+          "time": 7.637931034482759,
+          "position": "-462.7171212257419 1.5 93.34003552884798",
+          "rotation": "0.06000002980217764 -2.439185307179513 -2.4598346365095803e-14",
+          "fov": 80,
+          "far": 0,
+          "opacity": 0,
+          "screen": true,
+          "context": {
+            "markdown": "Pig, If you don't turn yourself in, we will hunt you down and find you."
+          }
+        }
+      ],
+      "focus": true,
+      "label": "6c79e15e-ed6a-44ba-9ca2-768a43894a6c",
+      "previewSrc": "/data/silber/live_view_upload-1770996465-338591261704-1-1_silbersteinstraSse-graffitis-1983-k1-n13-2023-09-18-124198-9196.jpg",
+      "startTime": 0,
+      "cameraPath": true
+    },
+    {
+      "id": "4c2675d2-4a17-40fb-b529-b4e9c99bf746",
+      "src": "/data/silber/live_view_upload-1770991716-159346052917-1-map%20copy.png",
+      "projectionType": "map",
+      "time": 0,
+      "cameraSelectable": false,
+      "keyframes": [
+        {
+          "time": 0,
+          "opacity": 1
+        }
+      ],
+      "label": "4c2675d2-4a17-40fb-b529-b4e9c99bf746",
+      "previewSrc": "/data/silber/live_view_upload-1770991716-159346052917-1-map%20copy.png",
+      "startTime": 0,
+      "focus": false,
+      "cameraPath": false
+    },
+    {
+      "id": "d1efec84-b2da-4015-b48d-1d70f76062d9",
+      "src": "/data/silber/live_view_upload-1770992048-562511795602-1-1_silbersteinstraSse-graffitis-1983-k1-n12-2023-09-18-124197-9779.jpg",
+      "projectionType": "perspective",
+      "time": 0,
+      "cameraSelectable": true,
+      "keyframes": [
+        {
+          "time": 52.465628551483164,
+          "position": "-450.75262453937205 1.5 77.96280243694575",
+          "rotation": "0.033999999999999225 1.1897166941153965 4.459592998543393e-16",
+          "fov": 19.550000000000075,
+          "far": 50,
+          "opacity": 1,
+          "screen": true,
+          "context": {
+            "markdown": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+          }
+        }
+      ],
+      "label": "d1efec84-b2da-4015-b48d-1d70f76062d9",
+      "previewSrc": "/data/silber/live_view_upload-1770992048-562511795602-1-1_silbersteinstraSse-graffitis-1983-k1-n12-2023-09-18-124197-9779.jpg",
+      "startTime": 0,
+      "focus": false,
+      "cameraPath": false
+    },
+    {
+      "id": "a65753f2-bb6e-46cb-bea9-6847822da909",
+      "src": "/data/silber/live_view_upload-1770992432-372657207350-2-1_silbersteinstraSse-graffitis-1983-k1-n5-2023-09-18-124190-8090.jpg",
+      "projectionType": "perspective",
+      "time": 0,
+      "cameraSelectable": true,
+      "keyframes": [
+        {
+          "time": 0,
+          "position": "-427.07300644817747 1.5 72.15403052591715",
+          "rotation": "-0.026000000000000092 0.1279999999999988 -0.04000000000000042",
+          "fov": 19,
+          "far": 15,
+          "opacity": 1,
+          "screen": true,
+          "context": {
+            "markdown": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+          }
+        }
+      ],
+      "label": "a65753f2-bb6e-46cb-bea9-6847822da909",
+      "previewSrc": "/data/silber/live_view_upload-1770992432-372657207350-2-1_silbersteinstraSse-graffitis-1983-k1-n5-2023-09-18-124190-8090.jpg",
+      "startTime": 0,
+      "focus": false,
+      "cameraPath": false
+    },
+    {
+      "id": "794043ce-c4af-432f-a873-70ddd5ccb7a1",
+      "src": "/data/silber/live_view_upload-1770992720-164310518408-2-1_silbersteinstraSse-graffitis-1983-k1-n7-2023-09-18-124192-7333.jpg",
+      "projectionType": "perspective",
+      "time": 0,
+      "cameraSelectable": true,
+      "keyframes": [
+        {
+          "time": 0,
+          "position": "-433.7680609084616 1.5000000000000284 85.63489779423298",
+          "rotation": "0.046000000000006216 -2.6216753472735186 0.019999999999997006",
+          "fov": 19,
+          "far": 35,
+          "opacity": 1,
+          "screen": true,
+          "context": {
+            "markdown": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+          }
+        }
+      ],
+      "label": "794043ce-c4af-432f-a873-70ddd5ccb7a1",
+      "previewSrc": "/data/silber/live_view_upload-1770992720-164310518408-2-1_silbersteinstraSse-graffitis-1983-k1-n7-2023-09-18-124192-7333.jpg",
+      "startTime": 0,
+      "focus": false,
+      "cameraPath": false
+    },
+    {
+      "id": "62368cd2-87d3-46b0-a58d-2047c115f3fe",
+      "src": "/data/silber/live_view_upload-1770993131-808047567896-1-1_silbersteinstraSse-graffitis-1983-k1-n9-2023-09-18-124194-4291.jpg",
+      "projectionType": "perspective",
+      "time": 0,
+      "cameraSelectable": true,
+      "keyframes": [
+        {
+          "time": 0,
+          "position": "-466.9782485079709 1.499999999999993 91.19909591882839",
+          "rotation": "0.026000000000009335 -2.2109142453121904 0.02000000000000022",
+          "fov": 33.300000000000054,
+          "far": 21,
+          "opacity": 1,
+          "screen": true,
+          "context": {
+            "markdown": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+          }
+        }
+      ],
+      "label": "62368cd2-87d3-46b0-a58d-2047c115f3fe",
+      "previewSrc": "/data/silber/live_view_upload-1770993131-808047567896-1-1_silbersteinstraSse-graffitis-1983-k1-n9-2023-09-18-124194-4291.jpg",
+      "startTime": 0,
+      "focus": false,
+      "cameraPath": false
+    },
+    {
+      "id": "981e3de2-de1e-494c-9710-36332e0e808f",
+      "src": "/data/silber/live_view_upload-1770993653-958704087175-1-1_silbersteinstraSse-graffitis-1983-k1-n14-2023-09-18-124199-4317.jpg",
+      "projectionType": "perspective",
+      "time": 0,
+      "cameraSelectable": true,
+      "keyframes": [
+        {
+          "time": 0,
+          "position": "-350.40307805616686 1.5 56.21403154502294",
+          "rotation": "-0.020000000000004188 0.0060000000000003245 5.868385415331437e-18",
+          "fov": 19,
+          "far": 20,
+          "opacity": 1,
+          "screen": true,
+          "context": {
+            "markdown": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+          }
+        }
+      ],
+      "label": "981e3de2-de1e-494c-9710-36332e0e808f",
+      "previewSrc": "/data/silber/live_view_upload-1770993653-958704087175-1-1_silbersteinstraSse-graffitis-1983-k1-n14-2023-09-18-124199-4317.jpg",
+      "startTime": 0,
+      "focus": false,
+      "cameraPath": false
+    },
+    {
+      "id": "065094fe-623b-4bf9-b455-66b86e3519f0",
+      "src": "/data/silber/live_view_upload-1770994168-21367320629-1-1_silbersteinstraSse-graffitis-1983-k1-n15-2023-09-18-124200-2564.jpg",
+      "projectionType": "perspective",
+      "time": 0,
+      "cameraSelectable": true,
+      "keyframes": [
+        {
+          "time": 0,
+          "position": "-30.718972433654745 1.5 -6.364704526174361",
+          "rotation": "0.04599999999999622 0.9599999999999975 7.985810515505592e-16",
+          "fov": 19,
+          "far": 22,
+          "opacity": 1,
+          "screen": true,
+          "context": {
+            "markdown": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+          }
+        }
+      ],
+      "label": "065094fe-623b-4bf9-b455-66b86e3519f0",
+      "previewSrc": "/data/silber/live_view_upload-1770994168-21367320629-1-1_silbersteinstraSse-graffitis-1983-k1-n15-2023-09-18-124200-2564.jpg",
+      "startTime": 0,
+      "focus": false,
+      "cameraPath": false
+    },
+    {
+      "id": "4de7cccb-ad82-4b97-83b8-62c0dac65fd4",
+      "src": "/data/silber/live_view_upload-1770996046-679101353549-1-1_silbersteinstraSse-graffitis-1983-k1-n4-2023-09-18-124189-7007.jpg",
+      "projectionType": "perspective",
+      "time": 0,
+      "cameraSelectable": true,
+      "keyframes": [
+        {
+          "time": 0,
+          "position": "-385.6254248947497 1.5 59.251850933629946",
+          "rotation": "-0.02200000000000079 -0.5019999999999963 5.867738769598037e-16",
+          "fov": 22.900000000000087,
+          "far": 14,
+          "opacity": 1,
+          "screen": true,
+          "context": {
+            "markdown": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+          }
+        }
+      ],
+      "label": "4de7cccb-ad82-4b97-83b8-62c0dac65fd4",
+      "previewSrc": "/data/silber/live_view_upload-1770996046-679101353549-1-1_silbersteinstraSse-graffitis-1983-k1-n4-2023-09-18-124189-7007.jpg",
+      "startTime": 0,
+      "focus": false,
+      "cameraPath": false
+    },
+    {
+      "id": "a598dfc5-68b9-42a8-aa13-26bd64d0aa6d",
+      "src": "/data/silber/live_view_upload-1770996465-338591261704-1-1_silbersteinstraSse-graffitis-1983-k1-n13-2023-09-18-124198-9196.jpg",
+      "projectionType": "perspective",
+      "time": 0,
+      "cameraSelectable": true,
+      "keyframes": [
+        {
+          "time": 0,
+          "position": "-357.13970696466583 1.5 63.583989775332235",
+          "rotation": "-0.01799999999998137 1.9940000000000282 -0.019999999999994137",
+          "fov": 19,
+          "far": 17,
+          "opacity": 1,
+          "screen": true,
+          "context": {
+            "markdown": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+          }
+        }
+      ],
+      "label": "a598dfc5-68b9-42a8-aa13-26bd64d0aa6d",
+      "previewSrc": "/data/silber/live_view_upload-1770996465-338591261704-1-1_silbersteinstraSse-graffitis-1983-k1-n13-2023-09-18-124198-9196.jpg",
+      "startTime": 0,
+      "focus": false,
+      "cameraPath": false
+    }
+  ]
+}

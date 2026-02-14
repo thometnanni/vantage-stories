@@ -1,1 +1,0 @@
-const a=[{slug:"g8",title:"Genova 2001",storyPath:"/data/g8/story.json"},{slug:"hermann",title:"Hermannstrasse",storyPath:"/data/hermann/story.json"}],n=t=>a.find(s=>s.slug===t)??null;export{n as g,a as s};
