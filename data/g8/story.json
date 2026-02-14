@@ -2,6 +2,11 @@
   "sceneSrc": "/data/g8/live_view_upload-1743167409-957551413072-2-scene.gltf",
   "maxTimelineTime": 5,
   "cameraPathProjectionId": "25ba760c-c702-47ce-82d0-499e823a30b0",
+  "cameraControl": {
+    "mode": "triggered",
+    "durationMs": 2400,
+    "easing": "linear"
+  },
   "ui": {
     "pageTitle": "Georeferenced images from the Genoa G8 Summit protest, 2001",
     "header": {

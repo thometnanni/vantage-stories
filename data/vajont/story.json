@@ -1,0 +1,335 @@
+{
+  "sceneSrc": "/data/vajont/live_view_upload-1771071578-29050191386-2-smaller.glb",
+  "maxTimelineTime": 3,
+  "cameraPathProjectionId": "4b7cd90d-9298-4539-9b18-597cc92e3834",
+  "cameraControl": {
+    "@mode": "triggered",
+    "@durationMs": 2400,
+    "@easing": "linear"
+  },
+  "ui": {
+    "pageTitle": "Vantage",
+    "header": {
+      "title": "",
+      "description": ""
+    },
+    "context": {
+      "introText": "",
+      "emptyText": "No context for this keyframe."
+    },
+    "renderer": {
+      "loading": "Loading renderer"
+    },
+    "credits": {
+      "label": "© OpenStreetMap contributors \n\n Realised with [Vantage](https://vantage.thometnanni.net/)."
+    },
+    "theme": {
+      "pageBg": "#000",
+      "sceneBg": "#000",
+      "panelFill": "#000",
+      "panelStroke": "#000",
+      "text": "#fff",
+      "mutedText": "#ccc",
+      "accent": "#fff",
+      "contextBg": "#000",
+      "contextText": "#fff",
+      "contextMuted": "#ccc"
+    }
+  },
+  "projections": [
+    {
+      "id": "4b7cd90d-9298-4539-9b18-597cc92e3834",
+      "src": "/data/vajont/live_view_upload-1771084310-412678465968-2-align.png",
+      "projectionType": "perspective",
+      "time": 0,
+      "cameraSelectable": true,
+      "keyframes": [
+        {
+          "time": 0,
+          "position": "-598.1711158449775 500.0 -219.7163844513917",
+          "rotation": "-0.5040000000000096 -1.9540000000000863 4.547366677208633e-16",
+          "fov": 63.500000000000014,
+          "far": 0,
+          "opacity": 0,
+          "screen": false,
+          "context": {
+            "markdown": "# Vajont Disaster\n\nOn 9 October 1963, the Vajont valley became the site of one of Italy's deadliest disasters.\n\nThis sequence follows the dam, Monte Toc, and the settlements downstream to document how the event unfolded across the landscape."
+          }
+        },
+        {
+          "time": 0,
+          "position": "-598.1711158449775 500.0 -219.7163844513917",
+          "rotation": "-0.7820000000000042 -2.0980000000000585 7.299794838537404e-16",
+          "fov": 64,
+          "far": 0,
+          "opacity": 0,
+          "screen": false
+        },
+        {
+          "time": 0.6293103448275862,
+          "position": "205.08760589970808 94.62771836049751 29.292334597281748",
+          "rotation": "0.02063277445840149 -0.6034829637779041 4.537719750069045e-5",
+          "fov": 64,
+          "far": 0,
+          "opacity": 0,
+          "screen": false,
+          "context": {
+            "markdown": "# View From The Dam\n\nThe Vajont dam is a double-curvature arch built in the 1950s.\n\nFrom this point, the geometry of the wall and the narrow reservoir basin are clearly visible."
+          }
+        },
+        {
+          "time": 1,
+          "position": "621.0249159068649 158.11574198498425 -101.23615432125969",
+          "rotation": "0.11001500939202025 2.8540369070752245 0.04561049607625706",
+          "fov": 62.59999999999998,
+          "far": 0,
+          "opacity": 0,
+          "screen": false,
+          "context": {
+            "markdown": "# Monte Toc\n\nThis is Monte Toc, the slope above the reservoir.\n\nBefore October 1963, surveys and observations had already documented slope movement and instability in this area."
+          }
+        },
+        {
+          "time": 1.3189655172413794,
+          "position": "718.2781155863618 300.0 7.664356623639421",
+          "rotation": "-0.4308886489208613 2.6170929686379485 0.010399086739373124",
+          "fov": 64,
+          "far": 0,
+          "opacity": 0,
+          "screen": false,
+          "context": {
+            "markdown": "# Landslide Masses\n\nOn 9 October 1963, a large landslide detached from Monte Toc and entered the reservoir.\n\nIn the model, the two main detached masses are visible."
+          }
+        },
+        {
+          "time": 1.5,
+          "position": "384.2550960209049 136.66532613981022 -79.22740040896704",
+          "rotation": "-0.40712531445514977 1.9680492657228743 0.007049333044792704",
+          "fov": 64,
+          "far": 0,
+          "opacity": 0,
+          "screen": false,
+          "context": {
+            "markdown": "# Basin After The Event\n\nAfter the slide, the reservoir was largely occupied by debris.\n\nThe former water surface was replaced by rock and sediment."
+          }
+        },
+        {
+          "time": 1.8,
+          "position": "-91.49723569801297 220.0 -31.059054508876542",
+          "rotation": "-0.2707742018341382 2.5919909951693825 -0.04408367188131518",
+          "fov": 64,
+          "far": 0,
+          "opacity": 0,
+          "screen": false,
+          "context": {
+            "markdown": "# Longarone Downstream\n\nThe displaced water overtopped the dam and moved down the valley as a destructive wave.\n\nLongarone and other settlements downstream were directly hit."
+          }
+        },
+        {
+          "time": 2,
+          "position": "-478.3415093625363 20.35478918477701 189.41140283246116",
+          "rotation": "-0.06477420183413922 -1.3771943120102075 -0.06408367188131525",
+          "fov": 64,
+          "far": 0,
+          "opacity": 0,
+          "screen": false,
+          "context": {
+            "markdown": "# View Of The Destroyed Village\n\nThis point documents the extent of destruction in the built area.\n\nUrban fabric and infrastructure were heavily damaged within minutes."
+          }
+        },
+        {
+          "time": 2.2,
+          "position": "-377.21500194069404 46.19299793961636 93.54390054290394",
+          "rotation": "-0.234774201834141 -1.3051943120102187 -0.044083671881314956",
+          "fov": 64,
+          "far": 0,
+          "opacity": 0,
+          "screen": false
+        },
+     
+        {
+          "time": 3,
+          "position": "88.26450161870702 100.22291640248307 9.586402113370747",
+          "rotation": "-0.0847742018341502 -1.6791943120103188 -0.124083671881317",
+          "fov": 64,
+          "far": 0,
+          "opacity": 0,
+          "screen": false,
+          "context": {
+            "markdown": "# The Dam Today\n\nThe dam structure remained standing after the event.\n\nToday it functions as a material trace of the disaster and its territorial consequences."
+          }
+        }
+      ],
+      "focus": true,
+      "label": "4b7cd90d-9298-4539-9b18-597cc92e3834",
+      "previewSrc": "/data/vajont/live_view_upload-1771084310-412678465968-2-align.png",
+      "startTime": 0,
+      "cameraPath": false
+    },
+    {
+      "id": "51acba6e-681c-4585-b181-7daef2c83e16",
+      "src": "/data/vajont/live_view_upload-1771080835-313039567355-1-Vajont_Diga_1960.jpg",
+      "projectionType": "perspective",
+      "time": 0.6,
+      "cameraSelectable": true,
+      "keyframes": [
+        {
+          "time": 0,
+          "position": "205.37268267085042 95.0392848459106 28.204286261775497",
+          "rotation": "-0.06400000000000522 -0.649999999999943 0.04000000000000003",
+          "fov": 45.20000000000007,
+          "far": 1000,
+          "opacity": 1,
+          "screen": false
+        },
+         {
+          "time": 1,
+          "position": "205.37268267085042 95.0392848459106 28.204286261775497",
+          "rotation": "-0.06400000000000522 -0.649999999999943 0.04000000000000003",
+          "fov": 45.20000000000007,
+          "far": 1000,
+          "opacity": 0,
+          "screen": false
+        }
+      ],
+      "label": "51acba6e-681c-4585-b181-7daef2c83e16",
+      "previewSrc": "/data/vajont/live_view_upload-1771080835-313039567355-1-Vajont_Diga_1960.jpg",
+      "startTime": 0,
+      "focus": false,
+      "cameraPath": false
+    },
+    {
+      "id": "f6fcb608-bd3a-4415-a4a2-19dacd4bff02",
+      "src": "/data/vajont/live_view_upload-1771071761-958877243720-2-PXL_20260103_114249257.jpg",
+      "projectionType": "perspective",
+      "time": 2.4,
+      "cameraSelectable": true,
+      "keyframes": [
+        {
+          "time": 0,
+          "position": "83.46678958549032 104.98136723283403 8.857457007584685",
+          "rotation": "-0.16999999999999363 -1.6240000000000387 -1.8161907169822815e-15",
+          "fov": 62.19999999999973,
+          "far": 100,
+          "opacity": 1,
+          "screen": true
+        }
+      ],
+      "label": "f6fcb608-bd3a-4415-a4a2-19dacd4bff02",
+      "previewSrc": "/data/vajont/live_view_upload-1771071761-958877243720-2-PXL_20260103_114249257.jpg",
+      "startTime": 2.4,
+      "focus": false,
+      "cameraPath": false
+    },
+    {
+      "id": "f7f56256-1ab7-437d-8979-aac558fa1c95",
+      "src": "/data/vajont/live_view_upload-1771072486-661637113721-1-Vajont_Dam_1963.jpg",
+      "projectionType": "perspective",
+      "time": 1.5,
+      "cameraSelectable": true,
+      "keyframes": [
+        {
+          "time": 0,
+          "position": "366.1735050725806 122.98887723729035 -75.91821841841757",
+          "rotation": "-0.14477420183416162 2.2059909951695875 0.015916328118686027",
+          "fov": 39.60000000000002,
+          "far": 150,
+          "opacity": 1,
+          "screen": true
+        }
+      ],
+      "label": "f7f56256-1ab7-437d-8979-aac558fa1c95",
+      "previewSrc": "/data/vajont/live_view_upload-1771072486-661637113721-1-Vajont_Dam_1963.jpg",
+      "startTime": 1.5,
+      "focus": false,
+      "cameraPath": false
+    },
+    {
+      "id": "82451b9a-0e03-4624-88a4-e7415b8069d3",
+      "src": "/data/vajont/live_view_upload-1771072125-132709765779-1-Vajont1963_5.jpg",
+      "projectionType": "perspective",
+      "time": 2,
+      "cameraSelectable": true,
+      "keyframes": [
+        {
+          "time": 0,
+          "position": "-477.44062633423664 19.96792419814401 188.54920013251387",
+          "rotation": "-0.06600000000000358 -1.361999999999931 -0.09999999999999781",
+          "fov": 32.65000000000001,
+          "far": 1000,
+          "opacity": 1,
+          "screen": false
+        },
+        {
+          "time": 0.4,
+          "position": "-477.44062633423664 19.96792419814401 188.54920013251387",
+          "rotation": "-0.06600000000000358 -1.361999999999931 -0.09999999999999781",
+          "fov": 32.65000000000001,
+          "far": 1000,
+          "opacity": 0,
+          "screen": false
+        }
+      ],
+      "label": "82451b9a-0e03-4624-88a4-e7415b8069d3",
+      "previewSrc": "/data/vajont/live_view_upload-1771072125-132709765779-1-Vajont1963_5.jpg",
+      "startTime": 2,
+      "focus": false,
+      "cameraPath": false
+    },
+    {
+      "id": "08a23e4e-ae19-49a9-afeb-2473e2f499bf",
+      "src": "/data/vajont/live_view_upload-1771072322-255011450170-1-Vajont1963_8.jpg",
+      "projectionType": "perspective",
+      "time": 2.2,
+      "cameraSelectable": true,
+      "keyframes": [
+        {
+          "time": 0,
+          "position": "-375.5055306076077 43.99897608737835 91.70818721676704",
+          "rotation": "-0.07599999999999667 -1.3700000000000008 3.660342212690044e-15",
+          "fov": 43.499999999999936,
+          "far": 1000,
+          "opacity": 1,
+          "screen": false
+        },
+        {
+          "time": 0.9,
+          "position": "-375.5055306076077 43.99897608737835 91.70818721676704",
+          "rotation": "-0.07599999999999667 -1.3700000000000008 3.660342212690044e-15",
+          "fov": 43.499999999999936,
+          "far": 1000,
+          "opacity": 0,
+          "screen": false
+        }
+      ],
+      "label": "08a23e4e-ae19-49a9-afeb-2473e2f499bf",
+      "previewSrc": "/data/vajont/live_view_upload-1771072322-255011450170-1-Vajont1963_8.jpg",
+      "startTime": 2.2,
+      "focus": false,
+      "cameraPath": false
+    },
+    {
+      "id": "0bdd5912-c120-400e-a550-cc9a750fdfb2",
+      "src": "/data/vajont/live_view_upload-1771083292-962224848222-1-prima.jpeg",
+      "projectionType": "perspective",
+      "time": 1,
+      "cameraSelectable": true,
+      "keyframes": [
+        {
+          "time": 1,
+          "position": "586.5246518205344 167.8874509573351 -11.841544923691812",
+          "rotation": "-0.09092036732053115 2.8420000000000014 0.18689280275926828",
+          "fov": 48.6,
+          "far": 100,
+          "opacity": 1,
+          "screen": true
+        }
+      ],
+      "label": "0bdd5912-c120-400e-a550-cc9a750fdfb2",
+      "previewSrc": "/data/vajont/live_view_upload-1771083292-962224848222-1-prima.jpeg",
+      "startTime": 1,
+      "focus": false,
+      "cameraPath": false
+    }
+  ]
+}

@@ -29,24 +29,7 @@
     }
   },
   "projections": [
-    {
-      "id": "39ef5ce4-8d0a-4630-ba90-346663993cee",
-      "src": "/data/silber/live_view_upload-1770991716-159346052917-1-map%20copy.png",
-      "projectionType": "map",
-      "time": 0,
-      "cameraSelectable": false,
-      "keyframes": [
-        {
-          "time": 0,
-          "opacity": 1
-        }
-      ],
-      "label": "39ef5ce4-8d0a-4630-ba90-346663993cee",
-      "previewSrc": "/data/silber/live_view_upload-1770991716-159346052917-1-map%20copy.png",
-      "startTime": 0,
-      "focus": false,
-      "cameraPath": false
-    },
+   
     {
       "id": "6c79e15e-ed6a-44ba-9ca2-768a43894a6c",
       "src": "/data/silber/live_view_upload-1770996465-338591261704-1-1_silbersteinstraSse-graffitis-1983-k1-n13-2023-09-18-124198-9196.jpg",
@@ -213,7 +196,7 @@
     },
     {
       "id": "4c2675d2-4a17-40fb-b529-b4e9c99bf746",
-      "src": "/data/silber/live_view_upload-1770991716-159346052917-1-map%20copy.png",
+      "src": "/data/silber/berlin-map.png",
       "projectionType": "map",
       "time": 0,
       "cameraSelectable": false,
@@ -224,7 +207,7 @@
         }
       ],
       "label": "4c2675d2-4a17-40fb-b529-b4e9c99bf746",
-      "previewSrc": "/data/silber/live_view_upload-1770991716-159346052917-1-map%20copy.png",
+      "previewSrc": "/data/silber/berlin-map.png",
       "startTime": 0,
       "focus": false,
       "cameraPath": false
