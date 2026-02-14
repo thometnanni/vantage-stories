@@ -3,9 +3,9 @@
   "maxTimelineTime": 3,
   "cameraPathProjectionId": "4b7cd90d-9298-4539-9b18-597cc92e3834",
   "cameraControl": {
-    "@mode": "triggered",
-    "@durationMs": 2400,
-    "@easing": "linear"
+    "mode": "triggered",
+    "durationMs": 2400,
+    "easing": "linear"
   },
   "ui": {
     "pageTitle": "Vantage",
@@ -53,7 +53,7 @@
           "opacity": 0,
           "screen": false,
           "context": {
-            "markdown": "# Vajont Disaster\n\nOn 9 October 1963, the Vajont valley became the site of one of Italy's deadliest disasters.\n\nThis sequence follows the dam, Monte Toc, and the settlements downstream to document how the event unfolded across the landscape."
+            "markdown": "# Vajont Disaster\n\nOn 9 October 1963, around 260 million cubic meters of rock detached from Monte Toc and entered the Vajont reservoir.\n\nThe impact wave overtopped the dam and destroyed settlements downstream, killing about 2,000 people, largely civilians.\n\nRecords from the period show that slope instability had been observed before the event."
           }
         },
         {
@@ -110,7 +110,7 @@
           "opacity": 0,
           "screen": false,
           "context": {
-            "markdown": "# Basin After The Event\n\nAfter the slide, the reservoir was largely occupied by debris.\n\nThe former water surface was replaced by rock and sediment."
+            "markdown": "# Basin After The Event\n\nAfter the landslide, most of the reservoir volume was occupied by slide material.\n\nWater was displaced, and the basin was filled by millions of cubic meters of rock and sediment."
           }
         },
         {
@@ -122,7 +122,7 @@
           "opacity": 0,
           "screen": false,
           "context": {
-            "markdown": "# Longarone Downstream\n\nThe displaced water overtopped the dam and moved down the valley as a destructive wave.\n\nLongarone and other settlements downstream were directly hit."
+            "markdown": "# Longarone Downstream\n\nThe displaced water overtopped the dam and moved down the valley as a destructive wave.\n\nLongarone and other settlements downstream were devastated within minutes: entire built areas were swept away, infrastructure was destroyed, and about 2,000 people were killed."
           }
         },
         {
@@ -146,7 +146,7 @@
           "opacity": 0,
           "screen": false
         },
-     
+
         {
           "time": 3,
           "position": "88.26450161870702 100.22291640248307 9.586402113370747",
@@ -156,7 +156,7 @@
           "opacity": 0,
           "screen": false,
           "context": {
-            "markdown": "# The Dam Today\n\nThe dam structure remained standing after the event.\n\nToday it functions as a material trace of the disaster and its territorial consequences."
+            "markdown": "# The Dam Today\n\nThe dam structure remained standing after the event.\n\nToday it marks a landscape permanently reshaped by the 1963 disaster."
           }
         }
       ],
@@ -182,7 +182,7 @@
           "opacity": 1,
           "screen": false
         },
-         {
+        {
           "time": 1,
           "position": "205.37268267085042 95.0392848459106 28.204286261775497",
           "rotation": "-0.06400000000000522 -0.649999999999943 0.04000000000000003",
@@ -232,10 +232,19 @@
           "time": 0,
           "position": "366.1735050725806 122.98887723729035 -75.91821841841757",
           "rotation": "-0.14477420183416162 2.2059909951695875 0.015916328118686027",
-          "fov": 39.60000000000002,
-          "far": 150,
+          "fov": 40,
+          "far": 180,
           "opacity": 1,
           "screen": true
+        },
+         {
+          "time": 1.8,
+          "position": "366.1735050725806 122.98887723729035 -75.91821841841757",
+          "rotation": "-0.14477420183416162 2.2059909951695875 0.015916328118686027",
+          "fov": 40,
+          "far": 0,
+          "opacity": 0,
+          "screen": false
         }
       ],
       "label": "f7f56256-1ab7-437d-8979-aac558fa1c95",
