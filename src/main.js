@@ -612,8 +612,9 @@ class VantageProjection extends HTMLElement {
   update() {
     if (Object.keys(this.keyframes).length === 0) return
     const keyframes = Object.values(this.keyframes).toSorted((a, b) => a.time - b.time)
+    const effectiveTime = (this.rendererTime ?? 0) - (this.offset ?? 0)
 
-    const keyframe = keyframes.findLast(({ time }) => time <= this.rendererTime) ?? keyframes[0]
+    const keyframe = keyframes.findLast(({ time }) => time <= effectiveTime) ?? keyframes[0]
     this.dispatchEvent(
       new CustomEvent('vantage:update-projection-multi', {
         bubbles: true,
