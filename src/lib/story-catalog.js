@@ -8,12 +8,12 @@ const storyCatalog = [
     slug: 'g8',
     title: 'Genova 2001',
     storyPath: '/data/g8/story.json'
+  },
+  {
+    slug: 'vajont',
+    title: 'Vajont',
+    storyPath: '/data/vajont/story.json'
   }
-  // {
-  //   slug: 'hermann',
-  //   title: 'Hermannstrasse',
-  //   storyPath: '/data/hermann/story.json'
-  // }
 ]
 
 const getStoryBySlug = (slug) => storyCatalog.find((story) => story.slug === slug) ?? null

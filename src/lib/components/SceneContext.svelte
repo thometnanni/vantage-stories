@@ -2,7 +2,7 @@
   let { moment = null, active = false, heightVh = 92 } = $props()
 </script>
 
-<section class="flex items-center py-2" style={`min-height:${heightVh}dvh`}>
+<section class="flex items-center py-2 p-4" style={`min-height:${heightVh}dvh`}>
   {#if moment?.hasContent}
     <article
       class={`w-fit max-w-xl transition-opacity duration-300 ${
