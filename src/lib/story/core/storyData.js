@@ -49,10 +49,35 @@ const DEFAULT_UI = {
   }
 }
 
+const DEFAULT_CAMERA_CONTROL = {
+  mode: 'scrub',
+  durationMs: 1200,
+  easing: 'linear'
+}
+
 const toTrimmedString = (value) => (typeof value === 'string' ? value.trim() : '')
 const toStringOrFallback = (value, fallback) => {
   const normalized = toTrimmedString(value)
   return normalized.length > 0 ? normalized : fallback
+}
+
+const resolveCameraControl = (input) => {
+  const source = input && typeof input === 'object' ? input : {}
+  const modeRaw = toTrimmedString(source.mode).toLowerCase()
+  const mode = modeRaw === 'triggered' ? 'triggered' : 'scrub'
+  const durationMs = Math.max(
+    120,
+    Math.min(
+      10000,
+      toFiniteNumber(
+        source.durationMs ?? source.duration ?? source.transitionMs,
+        DEFAULT_CAMERA_CONTROL.durationMs
+      )
+    )
+  )
+  const easing = toStringOrFallback(source.easing, DEFAULT_CAMERA_CONTROL.easing)
+
+  return { mode, durationMs, easing }
 }
 
 const normalizeVectorString = (value) => {
@@ -635,6 +660,7 @@ const resolveStoryData = (data = {}) => {
     cameraPathProjection,
     cameraPathRange,
     narrativeMoments,
+    cameraControl: resolveCameraControl(data.cameraControl),
     ui: resolveUiConfig(data.ui)
   }
 }

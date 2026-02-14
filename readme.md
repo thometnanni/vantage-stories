@@ -55,3 +55,11 @@ Context is markdown via `context.markdown`, usually on camera-path keyframes:
 Optional pacing controls per keyframe:
 - `scrollWeight`: slower/faster transition to the next keyframe.
 - `pause`: hold longer on this keyframe while scrolling.
+
+```json
+ "cameraControl": {
+    "mode": "triggered", // instead of always following mouse scroll
+    "durationMs": 1400,
+    "easing": "easeInOutCubic"
+  },
+```

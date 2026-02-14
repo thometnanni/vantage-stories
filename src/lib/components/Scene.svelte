@@ -20,6 +20,14 @@
   let cameraPathProjection = $derived(starter.cameraPathProjection)
   let cameraPathProjectionId = $derived(cameraPathProjection?.id ?? '')
   let cameraPathRange = $derived(starter.cameraPathRange ?? { start: 0, end: 1, duration: 1 })
+  let cameraControl = $derived(starter.cameraControl ?? { mode: 'scrub', durationMs: 900, easing: 'easeInOutCubic' })
+  let cameraControlMode = $derived(cameraControl.mode === 'triggered' ? 'triggered' : 'scrub')
+  let cameraTransitionDuration = $derived(Math.max(120, Number(cameraControl.durationMs) || 900))
+  let cameraTransitionEasing = $derived(
+    typeof cameraControl.easing === 'string' && cameraControl.easing.trim().length > 0
+      ? cameraControl.easing
+      : 'linear'
+  )
   let narrativeMoments = $derived(
     Array.isArray(starter.narrativeMoments) ? starter.narrativeMoments : []
   )
@@ -50,6 +58,11 @@
   let rendererReady = $state(false)
   let currentTime = $state(0)
   let scrollProgress = $state(0)
+  let triggeredStepIndex = $state(0)
+  let triggeredDesiredStepIndex = $state(0)
+  let triggeredTargetStepIndex = $state(0)
+  let triggeredAnimating = $state(false)
+  let transitionRaf = 0
 
   let scrollTrack
   let timelineTrack = $state(null)
@@ -62,7 +75,76 @@
     const parsed = Number(value)
     return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback
   }
+  const easeLinear = (value) => value
+  const easeInOutCubic = (value) =>
+    value < 0.5 ? 4 * value * value * value : 1 - Math.pow(-2 * value + 2, 3) / 2
+  const easeOutCubic = (value) => 1 - Math.pow(1 - value, 3)
+  const getEasingFn = (name) => {
+    const normalized = normalizeText(name).toLowerCase()
+    if (normalized === 'linear') return easeLinear
+    if (normalized === 'easeoutcubic' || normalized === 'out') return easeOutCubic
+    return easeInOutCubic
+  }
   let theme = $derived(ui.theme ?? {})
+
+  const uniqueSortedTimes = (values) => {
+    const unique = new Set()
+    return values
+      .filter((time) => Number.isFinite(time))
+      .sort((a, b) => a - b)
+      .filter((time) => {
+        const key = time.toFixed(6)
+        if (unique.has(key)) return false
+        unique.add(key)
+        return true
+      })
+  }
+
+  let keyframeStepTimes = $derived.by(() => {
+    const times = Array.isArray(cameraPathProjection?.keyframes)
+      ? cameraPathProjection.keyframes
+          .map((keyframe) => Number(keyframe?.time))
+          .filter((time) => Number.isFinite(time))
+      : []
+
+    return uniqueSortedTimes(times)
+  })
+
+  let narrativeStepTimes = $derived.by(() => {
+    const times = Array.isArray(narrativeMoments)
+      ? narrativeMoments
+          .map((moment) => {
+            const title = normalizeText(moment?.context?.title)
+            const markdown = normalizeText(moment?.context?.markdown)
+            return title.length > 0 || markdown.length > 0 ? Number(moment?.time) : Number.NaN
+          })
+          .filter((time) => Number.isFinite(time))
+      : []
+
+    return uniqueSortedTimes(times)
+  })
+
+  let cameraStepTimes = $derived.by(() => {
+    if (cameraControlMode === 'triggered' && narrativeStepTimes.length >= 2) {
+      return narrativeStepTimes
+    }
+
+    const times = keyframeStepTimes
+    if (times.length > 0) return times
+    return [cameraPathRange.start, cameraPathRange.end]
+  })
+
+  let cameraSetupKey = $derived.by(() => {
+    const times = Array.isArray(cameraStepTimes) ? cameraStepTimes.map((value) => Number(value).toFixed(6)).join(',') : ''
+    return [
+      cameraControlMode,
+      cameraPathProjectionId,
+      Number(cameraPathRange.start).toFixed(6),
+      Number(cameraPathRange.end).toFixed(6),
+      times
+    ].join('|')
+  })
+  let appliedCameraSetupKey = $state('')
 
   let scrollTimingPoints = $derived.by(() => {
     const keyframes = Array.isArray(cameraPathProjection?.keyframes)
@@ -176,6 +258,130 @@
     return points[points.length - 1].progress
   }
 
+  let cameraStepProgresses = $derived.by(() =>
+    cameraStepTimes.map((time) => scrollProgressFromTime(time))
+  )
+
+  let cameraStepBoundaries = $derived.by(() => {
+    const progresses = cameraStepProgresses
+    if (!Array.isArray(progresses) || progresses.length <= 1) return []
+
+    const boundaries = []
+    for (let index = 0; index < progresses.length - 1; index += 1) {
+      boundaries.push((progresses[index] + progresses[index + 1]) * 0.5)
+    }
+    return boundaries
+  })
+
+  const cancelTriggeredTransitionFrame = () => {
+    if (transitionRaf) {
+      cancelAnimationFrame(transitionRaf)
+      transitionRaf = 0
+    }
+  }
+
+  const stopTriggeredTransition = () => {
+    cancelTriggeredTransitionFrame()
+    triggeredAnimating = false
+  }
+
+  const animateToTime = (targetTime, onComplete) => {
+    if (!Number.isFinite(targetTime)) return
+    const startTime = Number(currentTime)
+    if (!Number.isFinite(startTime) || Math.abs(targetTime - startTime) <= 1e-6) {
+      currentTime = targetTime
+      onComplete?.()
+      return
+    }
+
+    // Cancel only the previous RAF; keep animation state ownership to the caller.
+    cancelTriggeredTransitionFrame()
+
+    const stepCount = Math.max(1, cameraStepTimes.length - 1)
+    const averageStepSpan = Math.max(1e-6, cameraPathRange.duration / stepCount)
+    const jumpFactor = clamp(Math.abs(targetTime - startTime) / averageStepSpan, 0.75, 2.5)
+    const duration = Math.max(1, cameraTransitionDuration * jumpFactor)
+    const easing = getEasingFn(cameraTransitionEasing)
+    const startAt = performance.now()
+
+    const step = () => {
+      const elapsed = performance.now() - startAt
+      const progress = clamp(elapsed / duration, 0, 1)
+      const eased = easing(progress)
+      currentTime = startTime + (targetTime - startTime) * eased
+
+      if (progress >= 1) {
+        currentTime = targetTime
+        transitionRaf = 0
+        onComplete?.()
+        return
+      }
+      transitionRaf = requestAnimationFrame(step)
+    }
+
+    transitionRaf = requestAnimationFrame(step)
+  }
+
+  const stepIndexFromProgress = (progress) => {
+    const boundaries = cameraStepBoundaries
+    const steps = cameraStepTimes
+    if (!Array.isArray(steps) || steps.length <= 1 || !Array.isArray(boundaries)) return 0
+
+    const clampedProgress = clamp(progress, 0, 1)
+    for (let index = 0; index < boundaries.length; index += 1) {
+      if (clampedProgress < boundaries[index]) return index
+    }
+    return steps.length - 1
+  }
+
+  const requestTriggeredStep = (index) => {
+    const steps = cameraStepTimes
+    if (!Array.isArray(steps) || steps.length === 0) return
+
+    const clampedIndex = clamp(Math.round(index), 0, steps.length - 1)
+    triggeredDesiredStepIndex = clampedIndex
+
+    if (clampedIndex === triggeredStepIndex && !triggeredAnimating) return
+    if (triggeredAnimating && clampedIndex === triggeredTargetStepIndex) return
+
+    triggeredTargetStepIndex = clampedIndex
+    const target = Number(steps[clampedIndex])
+    if (!Number.isFinite(target)) return
+
+    triggeredAnimating = true
+    animateToTime(target, () => {
+      triggeredStepIndex = clampedIndex
+      triggeredTargetStepIndex = clampedIndex
+      triggeredAnimating = false
+      if (triggeredDesiredStepIndex !== triggeredStepIndex) {
+        requestTriggeredStep(triggeredDesiredStepIndex)
+      }
+    })
+  }
+
+  const applyProgressToCamera = (progress) => {
+    const clampedProgress = clamp(progress, 0, 1)
+    scrollProgress = clampedProgress
+
+    if (cameraControlMode === 'triggered') {
+      const steps = cameraStepTimes
+      if (!Array.isArray(steps) || steps.length === 0) return
+
+      const nextStepIndex = stepIndexFromProgress(clampedProgress)
+      requestTriggeredStep(nextStepIndex)
+      return
+    }
+
+    currentTime = timeFromScrollProgress(clampedProgress)
+  }
+
+  let visualProgress = $derived.by(() => {
+    if (cameraControlMode === 'triggered') {
+      return scrollProgressFromTime(currentTime)
+    }
+    return scrollProgress
+  })
+
   let introText = $derived.by(() => {
     const contextIntro = normalizeText(ui?.context?.introText)
     if (contextIntro.length > 0) return contextIntro
@@ -238,7 +444,7 @@
     if (sortedMoments.length === 0) return ''
     let active = sortedMoments[0]
     for (const moment of sortedMoments) {
-      if (moment.progress <= scrollProgress + 1e-6) {
+      if (moment.progress <= visualProgress + 1e-6) {
         active = moment
       } else {
         break
@@ -312,9 +518,7 @@
     const centerY = window.scrollY + window.innerHeight * 0.5
     const timelineProgress = getTimelineProgress(centerY)
     if (timelineProgress != null) {
-      const progress = clamp(timelineProgress, 0, 1)
-      scrollProgress = progress
-      currentTime = timeFromScrollProgress(progress)
+      applyProgressToCamera(timelineProgress)
       return
     }
 
@@ -323,10 +527,7 @@
     const rootTop = scrollTrack.offsetTop
     const maxScroll = Math.max(1, scrollTrack.offsetHeight - window.innerHeight)
     const rawProgress = (window.scrollY - rootTop) / maxScroll
-    const progress = clamp(rawProgress, 0, 1)
-
-    scrollProgress = progress
-    currentTime = timeFromScrollProgress(progress)
+    applyProgressToCamera(rawProgress)
   }
 
   const scheduleScrollSync = () => {
@@ -354,6 +555,7 @@
     window.addEventListener('resize', scheduleScrollSync, { passive: true })
 
     return () => {
+      stopTriggeredTransition()
       if (scrollRaf) {
         cancelAnimationFrame(scrollRaf)
         scrollRaf = 0
@@ -364,10 +566,35 @@
   })
 
   $effect(() => {
+    const setupKey = cameraSetupKey
     cameraPathRange
+    cameraStepTimes
+    cameraControlMode
     if (!rendererReady) {
-      currentTime = cameraPathRange.start
+      stopTriggeredTransition()
+      triggeredStepIndex = 0
+      triggeredDesiredStepIndex = 0
+      triggeredTargetStepIndex = 0
+      currentTime =
+        cameraControlMode === 'triggered'
+          ? Number(cameraStepTimes[0] ?? cameraPathRange.start)
+          : cameraPathRange.start
+      scrollProgress = 0
+      appliedCameraSetupKey = ''
       return
+    }
+
+    if (appliedCameraSetupKey === setupKey) return
+    appliedCameraSetupKey = setupKey
+
+    stopTriggeredTransition()
+    triggeredStepIndex = 0
+    triggeredDesiredStepIndex = 0
+    triggeredTargetStepIndex = 0
+    if (cameraControlMode === 'triggered') {
+      currentTime = Number(cameraStepTimes[triggeredStepIndex] ?? cameraPathRange.start)
+    } else {
+      currentTime = cameraPathRange.start
     }
     scheduleScrollSync()
   })
