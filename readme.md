@@ -41,8 +41,7 @@ Process Page
 
 ### Recorder Camera (mandatory id marker)
 
-Recorded camera-path behavior is enabled only for projections whose `id` contains `recorder`
-(for example `recorder`, `camera-recorder`, `my_recorder_path`).
+Recorded camera-path behavior is enabled only for projections whose `id` contains `recorder`.
 
 If no `recorder` projection is present, the app uses the fallback sequence camera path.
 
