@@ -19,7 +19,7 @@
         {/if}
         {#if moment.html}
           <div
-            class="story-richtext scene-context-copy text-base leading-tight text-[var(--story-context-muted)]"
+            class="story-richtext scene-context-copy leading-tight text-[var(--story-context-muted)]"
           >
             {@html moment.html}
           </div>
@@ -40,7 +40,7 @@
   .scene-context-copy :global(h4),
   .scene-context-copy :global(strong) {
     color: var(--story-context-text);
-    font-weight: 400;
+    font-weight: 600;
     padding-bottom: .5em;
   }
 
