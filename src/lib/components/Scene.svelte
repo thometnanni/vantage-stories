@@ -285,7 +285,7 @@
     triggeredAnimating = false
   }
 
-  const animateToTime = (targetTime, onComplete) => {
+  const animateToTime = (targetTime, onComplete, options = {}) => {
     if (!Number.isFinite(targetTime)) return
     const startTime = Number(currentTime)
     if (!Number.isFinite(startTime) || Math.abs(targetTime - startTime) <= 1e-6) {
@@ -294,13 +294,9 @@
       return
     }
 
-    // Cancel only the previous RAF; keep animation state ownership to the caller.
     cancelTriggeredTransitionFrame()
 
-    const stepCount = Math.max(1, cameraStepTimes.length - 1)
-    const averageStepSpan = Math.max(1e-6, cameraPathRange.duration / stepCount)
-    const jumpFactor = clamp(Math.abs(targetTime - startTime) / averageStepSpan, 0.75, 2.5)
-    const duration = Math.max(1, cameraTransitionDuration * jumpFactor)
+    const duration = Math.max(1, Number(options.durationMs) || cameraTransitionDuration)
     const easing = getEasingFn(cameraTransitionEasing)
     const startAt = performance.now()
 
@@ -334,6 +330,27 @@
     return steps.length - 1
   }
 
+  const nearestStepIndexFromTime = (time) => {
+    const steps = cameraStepTimes
+    const target = Number(time)
+    if (!Array.isArray(steps) || steps.length === 0 || !Number.isFinite(target)) return 0
+
+    let nearestIndex = 0
+    let nearestDistance = Number.POSITIVE_INFINITY
+
+    for (let index = 0; index < steps.length; index += 1) {
+      const stepTime = Number(steps[index])
+      if (!Number.isFinite(stepTime)) continue
+      const distance = Math.abs(stepTime - target)
+      if (distance < nearestDistance) {
+        nearestDistance = distance
+        nearestIndex = index
+      }
+    }
+
+    return nearestIndex
+  }
+
   const requestTriggeredStep = (index) => {
     const steps = cameraStepTimes
     if (!Array.isArray(steps) || steps.length === 0) return
@@ -348,15 +365,25 @@
     const target = Number(steps[clampedIndex])
     if (!Number.isFinite(target)) return
 
+    const originIndex = nearestStepIndexFromTime(currentTime)
+    const jumpSize = Math.abs(clampedIndex - originIndex)
+    let durationMs = cameraTransitionDuration
+    if (jumpSize >= 4) durationMs = Math.max(180, Math.min(durationMs * 0.45, 420))
+    else if (jumpSize >= 2) durationMs = Math.max(220, Math.min(durationMs * 0.65, 620))
+
     triggeredAnimating = true
-    animateToTime(target, () => {
-      triggeredStepIndex = clampedIndex
-      triggeredTargetStepIndex = clampedIndex
-      triggeredAnimating = false
-      if (triggeredDesiredStepIndex !== triggeredStepIndex) {
-        requestTriggeredStep(triggeredDesiredStepIndex)
-      }
-    })
+    animateToTime(
+      target,
+      () => {
+        triggeredStepIndex = clampedIndex
+        triggeredTargetStepIndex = clampedIndex
+        triggeredAnimating = false
+        if (triggeredDesiredStepIndex !== triggeredStepIndex) {
+          requestTriggeredStep(triggeredDesiredStepIndex)
+        }
+      },
+      { durationMs }
+    )
   }
 
   const applyProgressToCamera = (progress) => {

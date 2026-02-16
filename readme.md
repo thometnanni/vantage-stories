@@ -39,6 +39,32 @@ Process Page
 - `projections[]`: maps/perspective projections and keyframes.
 - `ui`: page title, intro, credits, and theme colors.
 
+### Recorder Camera (mandatory id marker)
+
+Recorded camera-path behavior is enabled only for projections whose `id` contains `recorder`
+(for example `recorder`, `camera-recorder`, `my_recorder_path`).
+
+If no `recorder` projection is present, the app uses the fallback sequence camera path.
+
+Example:
+
+```json
+{
+  "id": "recorder",
+  "projectionType": "perspective",
+  "focus": true,
+  "keyframes": [
+    {
+      "time": 0,
+      "position": "...",
+      "rotation": "...",
+      "fov": 66,
+      "far": 1500
+    }
+  ]
+}
+```
+
 Context is markdown via `context.markdown`, usually on camera-path keyframes:
 
 ```json

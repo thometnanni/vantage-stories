@@ -61,21 +61,28 @@ const toStringOrFallback = (value, fallback) => {
   return normalized.length > 0 ? normalized : fallback
 }
 
+const recorderProj = /(^|[-_])recorder($|[-_])/i
+
 const resolveCameraControl = (input) => {
   const source = input && typeof input === 'object' ? input : {}
-  const modeRaw = toTrimmedString(source.mode).toLowerCase()
+  const modeRaw = toTrimmedString(source.mode ?? source['@mode']).toLowerCase()
   const mode = modeRaw === 'triggered' ? 'triggered' : 'scrub'
   const durationMs = Math.max(
     120,
     Math.min(
       10000,
       toFiniteNumber(
-        source.durationMs ?? source.duration ?? source.transitionMs,
+        source.durationMs ??
+          source['@durationMs'] ??
+          source.duration ??
+          source.transitionMs ??
+          source['@duration'] ??
+          source['@transitionMs'],
         DEFAULT_CAMERA_CONTROL.durationMs
       )
     )
   )
-  const easing = toStringOrFallback(source.easing, DEFAULT_CAMERA_CONTROL.easing)
+  const easing = toStringOrFallback(source.easing ?? source['@easing'], DEFAULT_CAMERA_CONTROL.easing)
 
   return { mode, durationMs, easing }
 }
@@ -88,6 +95,46 @@ const normalizeVectorString = (value) => {
   const normalized = toTrimmedString(value)
   if (normalized.length === 0) return normalized
   return normalized.replaceAll(',', ' ').replace(/\s+/g, ' ').trim()
+}
+
+const parseVectorString = (value) => {
+  const normalized = normalizeVectorString(value)
+  if (normalized.length === 0) return null
+  const parts = normalized.split(' ').map((item) => toFiniteNumber(item, Number.NaN))
+  if (parts.some((item) => !Number.isFinite(item))) return null
+  return parts
+}
+
+const formatVectorString = (parts) =>
+  Array.isArray(parts) ? parts.map((value) => `${toFiniteNumber(value, 0)}`).join(' ') : ''
+
+const clampNumber = (value, min, max) => Math.min(max, Math.max(min, value))
+
+const applyLensToKeyframe = (keyframe, lens) => {
+  const next = { ...keyframe }
+  const fov = toFiniteNumber(lens?.fov, Number.NaN)
+  const far = toFiniteNumber(lens?.far, Number.NaN)
+  if (Number.isFinite(fov) && fov > 0) next.fov = fov
+  if (Number.isFinite(far) && far > 0) next.far = far
+  return next
+}
+
+const extractProjectionLens = (projection) => {
+  if (!projection || !Array.isArray(projection.keyframes)) return null
+  const keyframe = projection.keyframes.find(
+    (candidate) =>
+      keyframeHasCameraPose(candidate) ||
+      Number.isFinite(toFiniteNumber(candidate?.fov, Number.NaN)) ||
+      Number.isFinite(toFiniteNumber(candidate?.far, Number.NaN))
+  )
+  if (!keyframe) return null
+
+  const fov = toFiniteNumber(keyframe?.fov, Number.NaN)
+  const far = toFiniteNumber(keyframe?.far, Number.NaN)
+  const lens = {}
+  if (Number.isFinite(fov) && fov > 0) lens.fov = fov
+  if (Number.isFinite(far) && far > 0) lens.far = far
+  return Object.keys(lens).length > 0 ? lens : null
 }
 
 const normalizeContext = (value) => {
@@ -324,6 +371,85 @@ const withStableProjectionOrder = (projections) =>
     })
     .map(({ projection }) => projection)
 
+const projectionIsRecorder = (projection) =>
+  recorderProj.test(toTrimmedString(projection?.id))
+
+const buildTransitionBridgeKeyframes = (fromKeyframe, toKeyframe, options = {}) => {
+  const startPosition = parseVectorString(fromKeyframe?.position)
+  const endPosition = parseVectorString(toKeyframe?.position)
+  const startRotation = parseVectorString(fromKeyframe?.rotation)
+  const endRotation = parseVectorString(toKeyframe?.rotation)
+
+  if (!startPosition || !endPosition || !startRotation || !endRotation) return []
+
+  const startTime = toFiniteNumber(fromKeyframe?.time, 0)
+  const endTime = toFiniteNumber(toKeyframe?.time, startTime + 1)
+  const span = endTime - startTime
+  if (span <= 1e-6) return []
+
+  const horizontalDistance = Math.hypot(
+    endPosition[0] - startPosition[0],
+    endPosition[2] - startPosition[2]
+  )
+  const maxCurrentY = Math.max(startPosition[1], endPosition[1])
+  const baseLiftHeight = Math.min(2200, Math.max(280, horizontalDistance * 0.95 + 180))
+  let liftHeight = baseLiftHeight
+
+  // when the camera is already above the scene, to be improved
+  if (maxCurrentY >= 300) {
+    liftHeight = 0
+  } else if (maxCurrentY >= 180) {
+    liftHeight = Math.min(80, Math.max(24, horizontalDistance * 0.12))
+  }
+
+  const apexY = maxCurrentY + liftHeight
+
+  const outPosition = [
+    startPosition[0] * 0.8 + endPosition[0] * 0.2,
+    apexY,
+    startPosition[2] * 0.8 + endPosition[2] * 0.2
+  ]
+  const inPosition = [
+    startPosition[0] * 0.2 + endPosition[0] * 0.8,
+    apexY,
+    startPosition[2] * 0.2 + endPosition[2] * 0.8
+  ]
+  const bridgePitch = -clampNumber(0.32 + horizontalDistance / 2200 + liftHeight / 4000, 0.28, 0.85)
+  const outRotation = [bridgePitch, startRotation[1], 0]
+  const inRotation = [bridgePitch, endRotation[1], 0]
+
+  const lens = options.defaultLens ?? null
+  const lensFov = toFiniteNumber(lens?.fov, Number.NaN)
+  const lensFar = toFiniteNumber(lens?.far, Number.NaN)
+  const fromFov = toFiniteNumber(fromKeyframe?.fov, 45)
+  const toFov = toFiniteNumber(toKeyframe?.fov, 45)
+  const bridgeFov = Number.isFinite(lensFov) ? lensFov : clampNumber((fromFov + toFov) * 0.5, 34, 50)
+  const bridgeFar = Number.isFinite(lensFar)
+    ? lensFar
+    : Math.max(1200, toFiniteNumber(fromKeyframe?.far, 0), toFiniteNumber(toKeyframe?.far, 0))
+
+  const makeBridge = (template, time, position, rotation) => {
+    const bridge = {
+      ...buildHiddenPathKeyframe(template, time),
+      position: formatVectorString(position),
+      rotation: formatVectorString(rotation),
+      fov: bridgeFov,
+      far: bridgeFar,
+      opacity: 0,
+      screen: false
+    }
+    delete bridge.context
+    delete bridge.pause
+    delete bridge.scrollWeight
+    return bridge
+  }
+
+  return [
+    makeBridge(fromKeyframe, startTime + span * 0.33, outPosition, outRotation),
+    makeBridge(toKeyframe, startTime + span * 0.67, inPosition, inRotation)
+  ]
+}
+
 const buildRecordedCameraPathProjection = (projection) => {
   if (!projection || projection.projectionType !== 'perspective') return null
 
@@ -358,7 +484,8 @@ const buildRecordedCameraPathProjection = (projection) => {
   }
 }
 
-const buildCameraSequencePathProjection = (projections) => {
+const buildCameraSequencePathProjection = (projections, options = {}) => {
+  const defaultLens = options.defaultLens ?? null
   const sources = withStableProjectionOrder(
     projections.filter(
       (projection) =>
@@ -370,7 +497,7 @@ const buildCameraSequencePathProjection = (projections) => {
 
   if (sources.length === 0) return null
 
-  const keyframes = sources.map((projection, index) => {
+  const baseKeyframes = sources.map((projection, index) => {
     const keyframeWithPose = projection.keyframes.find((keyframe) =>
       keyframeHasCameraPose(keyframe)
     )
@@ -382,6 +509,32 @@ const buildCameraSequencePathProjection = (projections) => {
       ...(context ? { context } : {})
     }
   })
+
+  const hasRecorderProjection = projections.some((projection) => projectionIsRecorder(projection))
+  let keyframes = baseKeyframes
+
+  if (!hasRecorderProjection && baseKeyframes.length >= 2) {
+    keyframes = []
+    for (let index = 0; index < baseKeyframes.length; index += 1) {
+      const current = applyLensToKeyframe(baseKeyframes[index], defaultLens)
+      keyframes.push(current)
+
+      const next = baseKeyframes[index + 1]
+      if (!next) continue
+
+      keyframes.push(
+        ...buildTransitionBridgeKeyframes(
+          current,
+          applyLensToKeyframe(next, defaultLens),
+          { defaultLens }
+        )
+      )
+    }
+  } else if (!hasRecorderProjection && baseKeyframes.length === 1) {
+    keyframes = [applyLensToKeyframe(baseKeyframes[0], defaultLens)]
+  }
+
+  keyframes = ensurePathTimes(keyframes)
 
   const first = sources[0]
   const src = first.src || first.previewSrc
@@ -404,6 +557,8 @@ const buildCameraSequencePathProjection = (projections) => {
 
 const deriveCameraPathProjection = (input, projections) => {
   const preferredId = toTrimmedString(input.cameraPathProjectionId)
+  const hasRecorderProjection = projections.some((projection) => projectionIsRecorder(projection))
+  const hasScene = toTrimmedString(input?.sceneSrc).length > 0
 
   const byId =
     preferredId.length > 0 ? projections.find((projection) => projection.id === preferredId) : null
@@ -423,10 +578,20 @@ const deriveCameraPathProjection = (input, projections) => {
     .sort((a, b) => b.keyframes.length - a.keyframes.length)[0]
 
   const preferred = byId ?? flagged ?? focused ?? mostKeyframes ?? null
+  const defaultLens = extractProjectionLens(preferred)
+  const sequencePath = buildCameraSequencePathProjection(projections, { defaultLens })
   const recordedPath = preferred ? buildRecordedCameraPathProjection(preferred) : null
+
+  if (!hasScene && sequencePath) {
+    return sequencePath
+  }
+
   if (recordedPath && recordedPath.keyframes.length >= 2) return recordedPath
 
-  const sequencePath = buildCameraSequencePathProjection(projections)
+  if (!hasRecorderProjection && sequencePath) {
+    return sequencePath
+  }
+
   if (sequencePath) return sequencePath
 
   return recordedPath
@@ -458,11 +623,7 @@ const deriveCameraPathRange = (cameraPathProjection, fallbackMaxTimeline) => {
 }
 
 const parseVector = (value) => {
-  const normalized = normalizeVectorString(value)
-  if (normalized.length === 0) return null
-  const parts = normalized.split(' ').map((item) => toFiniteNumber(item, Number.NaN))
-  if (parts.some((item) => !Number.isFinite(item))) return null
-  return parts
+  return parseVectorString(value)
 }
 
 const angleDelta = (a, b) => {
