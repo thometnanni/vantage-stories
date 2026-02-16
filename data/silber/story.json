@@ -5,7 +5,7 @@
   "ui": {
     "pageTitle": "Silbersteinstraße Graffitis 1983",
     "header": {
-      "title": "Silbersteinstraße Graffitis 1983",
+      "title": "",
       "description": ""
     },
     "context": {
@@ -29,7 +29,6 @@
     }
   },
   "projections": [
-   
     {
       "id": "6c79e15e-ed6a-44ba-9ca2-768a43894a6c",
       "src": "/data/silber/live_view_upload-1770996465-338591261704-1-1_silbersteinstraSse-graffitis-1983-k1-n13-2023-09-18-124198-9196.jpg",
@@ -46,7 +45,7 @@
           "opacity": 0,
           "screen": true,
           "context": {
-            "markdown": "Susanne Matthes was very young, only 22 years old, when her life was violently taken by a stranger who was the same age as her and, like her, lived on Silbersteinstraße in Neukölln. \n\n They did not know each other. The murder of Susanne Matthes on 23 November 1983 was the nightmare of everyone who dreams of being attacked, raped and murdered in the dark by a stranger. \n\n This Map displays all the graffitis in the Silbersteinstraße that were painted in 1983. \n\n Photographed by Petra Gall."
+            "markdown": "# Silbersteinstraße Graffitis 1983 \n \n This sequence documents graffiti on Silbersteinstraße in Berlin-Neukölln after the murder of Susanne Matthes on 23 November 1983.\n\nThe mapped photographs were taken by Petra Gall in 1983."
           }
         },
         {
@@ -67,7 +66,7 @@
           "opacity": 0,
           "screen": true,
           "context": {
-            "markdown": "Call them rapists."
+            "markdown": "\"Call Them Rapists\""
           }
         },
         {
@@ -97,7 +96,7 @@
           "opacity": 0,
           "screen": true,
           "context": {
-            "markdown": "Susanne murdered, arm yourselves."
+            "markdown": "\"Susanne Murdered, Arm Yourselves\""
           }
         },
         {
@@ -109,7 +108,7 @@
           "opacity": 0,
           "screen": true,
           "context": {
-            "markdown": "Men murder everywhere."
+            "markdown": "\"Men Murder Everywhere\""
           }
         },
         {
@@ -121,7 +120,7 @@
           "opacity": 0,
           "screen": true,
           "context": {
-            "markdown": "Women defend yourselves."
+            "markdown": "\"Women Defend Yourselves\""
           }
         },
         {
@@ -142,7 +141,7 @@
           "opacity": 0,
           "screen": true,
           "context": {
-            "markdown": "Men murder."
+            "markdown": "\"Men Murder\""
           }
         },
         {
@@ -163,7 +162,7 @@
           "opacity": 0,
           "screen": true,
           "context": {
-            "markdown": "From 8 PM curfew for men."
+            "markdown": "\"From 8 PM Curfew For Men\""
           }
         },
         {
@@ -184,7 +183,7 @@
           "opacity": 0,
           "screen": true,
           "context": {
-            "markdown": "Pig, If you don't turn yourself in, we will hunt you down and find you."
+            "markdown": "\"Turn Yourself In\""
           }
         }
       ],
@@ -228,7 +227,7 @@
           "opacity": 1,
           "screen": true,
           "context": {
-            "markdown": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+            "markdown": "Mapped Photograph"
           }
         }
       ],
@@ -254,7 +253,7 @@
           "opacity": 1,
           "screen": true,
           "context": {
-            "markdown": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+            "markdown": "Mapped Photograph"
           }
         }
       ],
@@ -280,7 +279,7 @@
           "opacity": 1,
           "screen": true,
           "context": {
-            "markdown": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+            "markdown": "Mapped Photograph"
           }
         }
       ],
@@ -306,7 +305,7 @@
           "opacity": 1,
           "screen": true,
           "context": {
-            "markdown": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+            "markdown": "Mapped Photograph"
           }
         }
       ],
@@ -332,7 +331,7 @@
           "opacity": 1,
           "screen": true,
           "context": {
-            "markdown": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+            "markdown": "Mapped Photograph"
           }
         }
       ],
@@ -358,7 +357,7 @@
           "opacity": 1,
           "screen": true,
           "context": {
-            "markdown": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+            "markdown": "Mapped Photograph"
           }
         }
       ],
@@ -384,7 +383,7 @@
           "opacity": 1,
           "screen": true,
           "context": {
-            "markdown": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+            "markdown": "Mapped Photograph"
           }
         }
       ],
@@ -410,7 +409,7 @@
           "opacity": 1,
           "screen": true,
           "context": {
-            "markdown": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+            "markdown": "Mapped Photograph"
           }
         }
       ],
