@@ -14,7 +14,7 @@ dist-ssr
 .svelte-kit
 *.local
 story-catalog.js
-static/data/*
+# static/data/*
 
 # Editor directories and files
 .vscode/*

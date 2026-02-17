@@ -1,0 +1,224 @@
+{
+  "sceneSrc": "/data/g8/live_view_upload-1743167409-957551413072-2-scene.gltf",
+  "maxTimelineTime": 5,
+  "cameraPathProjectionId": "25ba760c-c702-47ce-82d0-499e823a30b0",
+  "cameraControl": {
+    "mode": "triggered",
+    "durationMs": 2000,
+    "easing": "linear"
+  },
+  "ui": {
+    "pageTitle": "Georeferenced images from the Genoa G8 Summit protest, 2001",
+    "header": {
+      "title": "",
+      "description": ""
+    },
+    "context": {
+      "introText": "",
+      "emptyText": "No context for this keyframe."
+    },
+    "renderer": {
+      "loading": "Loading renderer"
+    },
+    "credits": {
+      "label": "© OpenStreetMap contributors \n\n Realised with [Vantage](https://vantage.thometnanni.net/)."
+    },
+    "theme": {
+      "pageBg": "#000",
+      "sceneBg": "#000",
+      "panelFill": "#000",
+      "panelStroke": "#000",
+      "text": "#fff",
+      "mutedText": "#ccc",
+      "accent": "#fff",
+      "contextBg": "#000",
+      "contextText": "#fff",
+      "contextMuted": "#ccc"
+    }
+  },
+  "projections": [
+    {
+      "id": "f5166520-6065-4d97-a519-697bb7687320",
+      "src": "/data/g8/live_view_upload-1743174453-690994751799-2-map1.jpg",
+      "projectionType": "map",
+      "time": 0,
+      "cameraSelectable": false,
+      "keyframes": [
+        {
+          "time": 0,
+          "opacity": 1
+        }
+      ],
+      "label": "f5166520-6065-4d97-a519-697bb7687320",
+      "previewSrc": "/data/g8/live_view_upload-1743174453-690994751799-2-map1.jpg",
+      "startTime": 0,
+      "focus": false,
+      "cameraPath": false
+    },
+    {
+      "id": "25ba760c-c702-47ce-82d0-499e823a30b0",
+      "src": "/data/g8/Zona_Rossa.jpg",
+      "projectionType": "perspective",
+      "time": 0,
+      "cameraSelectable": true,
+      "keyframes": [
+        {
+          "time": 0,
+          "position": "342.94960587507626 800.0 1.2930483340682315",
+          "rotation": "-0.8876511092159365 1.5499344851310484 -0.008405797101450735",
+          "fov": 66,
+          "far": 0,
+          "opacity": 0,
+          "screen": true,
+          "@scrollWeight": 20,
+          "@pause": 10,
+          "context": {
+            "markdown": "# Genoa G8 Clashes, 2001\n\nIn July 2001, Genoa became the site of mass protests during the G8 summit. Demonstrations, police raids, and street clashes left deep political scars and turned the city into a defining moment in the history of European protest. \n\n This website maps, in space, the most prominent photographs from those days."
+          }
+        }
+      ]
+    },
+    {
+      "id": "1e56df8f-3464-4b19-a3dd-5983fd03648b",
+      "src": "/data/g8/Zona_Rossa.jpg",
+      "projectionType": "perspective",
+      "time": 0,
+      "cameraSelectable": true,
+      "keyframes": [
+        {
+          "time": 0,
+          "position": "-129.07137127372673 1.5 15.364980881218377",
+          "rotation": "0.015999999999997475 1.5253705988362378 -0.019999999999998203",
+          "fov": 51.95000000000001,
+          "far": 80,
+          "opacity": 1,
+          "screen": true,
+          "@scrollWeight": 20,
+          "@pause": 10
+        }
+      ],
+      "label": "1e56df8f-3464-4b19-a3dd-5983fd03648b",
+      "previewSrc": "/data/g8/Zona_Rossa.jpg",
+      "startTime": 0,
+      "focus": false,
+      "cameraPath": false,
+      "context": {
+        "markdown": "Barriers and armored vehicles defending the \"Red Zone\" in Genoa during the G8 summit, July 2001.\n\n*Photo by Michele Ferraris, Wikimedia Commons (CC BY-SA 4.0)*\n\n[Source image](https://commons.wikimedia.org/wiki/File:Genova_G8,_le_grate_della_Zona_Rossa.jpg)"
+      }
+    },
+
+    {
+      "id": "c6004594-430c-4702-b8f6-0f7648c8ba7c",
+      "src": "/data/g8/live_view_upload-1743173778-80144910757-1-Genova-G8_2001-Carica_della_polizia.jpg",
+      "projectionType": "perspective",
+      "time": 0,
+      "cameraSelectable": true,
+      "keyframes": [
+        {
+          "time": 0,
+          "position": "75.65543863399235 0.9975510002532815 108.93246892815363",
+          "rotation": "0.04200000000000026 -2.6790658503988727 -0.020000000000001072",
+          "fov": 25.649999999999906,
+          "far": 150,
+          "opacity": 1,
+          "screen": true,
+          "@scrollWeight": 20,
+          "@pause": 10
+        }
+      ],
+      "label": "c6004594-430c-4702-b8f6-0f7648c8ba7c",
+      "previewSrc": "/data/g8/live_view_upload-1743173778-80144910757-1-Genova-G8_2001-Carica_della_polizia.jpg",
+      "startTime": 0,
+      "focus": false,
+      "cameraPath": false,
+      "context": {
+        "markdown": "Police charge at protesters on Corso Torino during the G8 summit protests in Genoa, Italy, July 2001.\n\n*Photo by Ares Ferrari, Wikimedia Commons (CC BY 2.5 / GFDL)*\n\n[Source image](https://commons.wikimedia.org/wiki/File:Genova-G8_2001-Carica_della_polizia.jpg)"
+      }
+    },
+    {
+      "id": "2d725855-b92e-4aff-b4c8-152be4ebc37c",
+      "src": "/data/g8/live_view_upload-1768470875-701563560440-1-2026-01-15_genova.jpg",
+      "projectionType": "perspective",
+      "time": 0,
+      "cameraSelectable": true,
+      "keyframes": [
+        {
+          "time": 0,
+          "position": "149.55806096606656 1.5000000000015916 989.9414135811321",
+          "rotation": "-0.03200000000001374 0.41000000000012526 0.04000000000000405",
+          "fov": 37.94999999999998,
+          "far": 150,
+          "opacity": 1,
+          "screen": true,
+          "@scrollWeight": 20,
+          "@pause": 10
+        }
+      ],
+      "label": "2d725855-b92e-4aff-b4c8-152be4ebc37c",
+      "previewSrc": "/data/g8/live_view_upload-1768470875-701563560440-1-2026-01-15_genova.jpg",
+      "startTime": 0,
+      "focus": false,
+      "cameraPath": false,
+      "context": {
+        "markdown": "A still from *Get Rid of Yourself (2003)*.\n\nA video-film tract built from footage shot during the 2001 Genoa G8 riots. Rather than a conventional documentary, the film pulls its images and sounds apart and recomposes them through disjunction, repetition, and cheap video effects to capture the intensity of a shared political experience."
+      }
+    },
+    {
+      "id": "dabf998a-636a-4a46-88d3-dd3720f1eba3",
+      "src": "/data/g8/live_view_upload-1770550135-867519059969-1-Genova-G8_2001-Incidenti_a_Corso_Torino.jpg",
+      "projectionType": "perspective",
+      "time": 0,
+      "cameraSelectable": true,
+      "keyframes": [
+        {
+          "time": 0,
+          "position": "475.9905255185719 1.5 55.46519384275823",
+          "rotation": "0.07800000000000086 -0.22000000000000924 5.965456955035975e-16",
+          "fov": 53.50000000000001,
+          "far": 50,
+          "opacity": 1,
+          "screen": true,
+          "@scrollWeight": 20,
+          "@pause": 10
+        }
+      ],
+      "label": "dabf998a-636a-4a46-88d3-dd3720f1eba3",
+      "previewSrc": "/data/g8/live_view_upload-1770550135-867519059969-1-Genova-G8_2001-Incidenti_a_Corso_Torino.jpg",
+      "startTime": 0,
+      "focus": false,
+      "cameraPath": false,
+      "context": {
+        "markdown": "Incidents and clashes at Corso Torino near Brignole during the G8 summit protests in Genoa, Italy, July 2001.\n\n*Photo by Ares Ferrari, Wikimedia Commons (CC BY 2.5 / GFDL)*\n\n[Source image](https://commons.wikimedia.org/wiki/File:Genova-G8_2001-Incidenti_a_Corso_Torino.jpg)"
+      }
+    },
+
+    {
+      "id": "68919057-63f3-4bfb-8af9-25a6f5e37123",
+      "src": "/data/g8/live_view_upload-1743167576-821659256128-1-Genova-G8_2001-Via_Tolemaide.jpg",
+      "projectionType": "perspective",
+      "time": 0,
+      "cameraSelectable": true,
+      "keyframes": [
+        {
+          "time": 0,
+          "position": "955.2630656200047 1.5 36.32667019434373",
+          "rotation": "0.10800000000003147 1.8651853071801279 -0.020000000000009493",
+          "fov": 41.49999999999949,
+          "far": 50,
+          "opacity": 1,
+          "screen": true,
+          "@scrollWeight": 20,
+          "@pause": 10
+        }
+      ],
+      "label": "68919057-63f3-4bfb-8af9-25a6f5e37123",
+      "previewSrc": "/data/g8/live_view_upload-1743167576-821659256128-1-Genova-G8_2001-Via_Tolemaide.jpg",
+      "startTime": 0,
+      "focus": false,
+      "cameraPath": false,
+      "context": {
+        "markdown": "Burned car at the intersection of Via Montevideo and Via Tolemaide during the G8 summit protests in Genoa, Italy, July 2001.\n\n*Photo by Ares Ferrari, Wikimedia Commons (CC BY 2.5 / GFDL)*\n\n[Source image](https://commons.wikimedia.org/wiki/File:Genova-G8_2001-Via_Tolemaide.jpg)"
+      }
+    }
+  ]
+}
