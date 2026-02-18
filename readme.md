@@ -1,6 +1,8 @@
 # Vantage Stories
 
-![test](https://github.com/user-attachments/assets/49c767c0-8eaf-4ecd-8f75-d22eeaeebcb5)
+![vantage-loop](https://github.com/user-attachments/assets/165f7a8e-536e-422a-b29d-23c5b40784d0)
+
+
 > ⚠️ This code depends on a project structured by the [Vantage Platform](https://github.com/thometnanni/vantage).
 
 
