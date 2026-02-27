@@ -13,7 +13,7 @@
   alt="Vantage logo"
 />
 <main class="text-black py-8 px-4">
-  <section class="mb-10 max-w-6xl mx-auto">
+  <section class="mb-[150px] max-w-6xl mx-auto">
     <p class="text-4xl leading-[1.1] max-w-prose">
       <a class="underline underline-offset-4" href="https://vantage.thometnanni.net/">Vantage</a>
       reconstructs the spatial context of video recordings.
