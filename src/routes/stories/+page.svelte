@@ -1,5 +1,5 @@
 <script>
-  import { base } from '$app/paths'
+  import Cards from '$lib/components/Cards.svelte'
   import { storyCatalog } from '$lib/story-catalog'
 </script>
 
@@ -7,10 +7,6 @@
   <title>Vantage Stories</title>
 </svelte:head>
 
-<main class="mx-auto max-w-xl text-black py-4">
-  {#each storyCatalog as story (story.slug)}
-    <a href={`${base}/stories/${story.slug}`}>
-      <h1 class="text-xl font-normal pb-2">{story.title}</h1>
-    </a>
-  {/each}
+<main class="mx-auto max-w-6xl text-black py-4 px-4">
+  <Cards stories={storyCatalog} heading="Stories" />
 </main>

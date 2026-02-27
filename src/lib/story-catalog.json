@@ -1,0 +1,26 @@
+[
+  {
+    "slug": "silber",
+    "title": "Silbersteinstraße Graffitis 1983",
+    "storyPath": "/data/silber/story.json",
+    "href": "https://thometnanni.github.io/vantage-stories/stories/silber",
+    "media": "/stories/silberstein.mp4",
+    "mediaType": "video"
+  },
+  {
+    "slug": "g8",
+    "title": "Genoa G8 Clashes, 2001",
+    "storyPath": "/data/g8/story.json",
+    "href": "https://thometnanni.github.io/vantage-stories/stories/g8",
+    "media": "/stories/g8.webp",
+    "mediaType": "image"
+  },
+  {
+    "slug": "vajont",
+    "title": "Vajont Disaster",
+    "storyPath": "/data/vajont/story.json",
+    "href": "https://thometnanni.github.io/vantage-stories/stories/vajont",
+    "media": "/stories/vajont.mp4",
+    "mediaType": "video"
+  }
+]

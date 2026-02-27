@@ -1,5 +1,5 @@
 <script>
-  import { base } from '$app/paths'
+  import Cards from '$lib/components/Cards.svelte'
   import { storyCatalog } from '$lib/story-catalog'
 </script>
 
@@ -7,9 +7,14 @@
   <title>Vantage Stories</title>
 </svelte:head>
 
-<main class="mx-auto max-w-2xl text-black py-8 px-4">
-  <section class="mb-10">
-    <p class="text-xl leading-relaxed max-w-prose">
+<img
+  class="fixed top-4 right-4 z-30 w-24 sm:w-32 md:w-40 h-auto pointer-events-none select-none"
+  src="/vantage.png"
+  alt="Vantage logo"
+/>
+<main class="text-black py-8 px-4">
+  <section class="mb-10 max-w-6xl mx-auto">
+    <p class="text-4xl leading-[1.1] max-w-prose">
       <a class="underline underline-offset-4" href="https://vantage.thometnanni.net/">Vantage</a>
       reconstructs the spatial context of video recordings.
       <br />
@@ -18,15 +23,6 @@
   </section>
 
   <section>
-    <div class="grid gap-3">
-      {#each storyCatalog as story (story.slug)}
-        <a class="block py-2" href={`${base}/stories/${story.slug}`}>
-          <div class="text-lg font-medium">{story.title}</div>
-          <div class="text-sm text-neutral-600 mt-1">Read story</div>
-        </a>
-      {:else}
-        <div class="text-sm text-neutral-600">No stories yet.</div>
-      {/each}
-    </div>
+    <Cards stories={storyCatalog} heading="Stories" />
   </section>
 </main>

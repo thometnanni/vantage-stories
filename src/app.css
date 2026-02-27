@@ -26,7 +26,6 @@ body {
 
 body {
   font-family: 'Space Grotesk', sans-serif;
-  background: linear-gradient(180deg, var(--bg-start), var(--bg-end));
   color: #0f172a;
 }
 
