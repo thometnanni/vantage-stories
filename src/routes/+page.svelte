@@ -1,6 +1,7 @@
 <script>
   import Cards from '$lib/components/Cards.svelte'
   import { storyCatalog } from '$lib/story-catalog'
+  import { base } from '$app/paths';
 </script>
 
 <svelte:head>
@@ -19,7 +20,7 @@
       </a>
       <img
         class="inline h-[1.3em] leading-[0px] w-auto align-baseline"
-        src="/vantage-1.png"
+        src={base + '/vantage-1.png'}
         alt="Vantage logo"
       />
       reconstructs the spatial context of video recordings.

@@ -1,4 +1,5 @@
 <script>
+  import { base } from '$app/paths'
   let { stories = [], heading = 'Stories' } = $props()
 </script>
 
@@ -29,7 +30,7 @@
                 {#if story.mediaType === 'video'}
                   <video
                     class="w-full h-full object-cover block"
-                    src={story.media}
+                    src={base + story.media}
                     autoplay
                     loop
                     muted
@@ -40,7 +41,7 @@
                 {:else}
                   <img
                     class="w-full h-full object-cover block"
-                    src={story.media}
+                    src={base + story.media}
                     alt={story.title}
                     loading="lazy"
                   />
