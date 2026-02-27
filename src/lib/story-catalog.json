@@ -4,8 +4,8 @@
     "title": "Silbersteinstraße Graffitis 1983",
     "storyPath": "/data/silber/story.json",
     "href": "https://thometnanni.github.io/vantage-stories/stories/silber",
-    "media": "/stories/silberstein.mp4",
-    "mediaType": "video"
+    "media": "/stories/silberstein.webp",
+    "mediaType": "image"
   },
   {
     "slug": "g8",
@@ -20,7 +20,7 @@
     "title": "Vajont Disaster",
     "storyPath": "/data/vajont/story.json",
     "href": "https://thometnanni.github.io/vantage-stories/stories/vajont",
-    "media": "/stories/vajont.mp4",
-    "mediaType": "video"
+    "media": "/stories/vajont.webp",
+    "mediaType": "image"
   }
 ]
