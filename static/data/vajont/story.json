@@ -120,10 +120,7 @@
           "fov": 64,
           "far": 0,
           "opacity": 0,
-          "screen": false,
-          "context": {
-            "markdown": "# Longarone Downstream\n\nThe displaced water overtopped the dam and moved down the valley as a destructive wave.\n\nLongarone and other settlements downstream were devastated within minutes: entire built areas were swept away, infrastructure was destroyed, and about 2,000 people were killed."
-          }
+          "screen": false
         },
         {
           "time": 2,
@@ -134,7 +131,7 @@
           "opacity": 0,
           "screen": false,
           "context": {
-            "markdown": "# View Of The Destroyed Village\n\nThis point documents the extent of destruction in the built area.\n\nUrban fabric and infrastructure were heavily damaged within minutes."
+            "markdown": "# Longarone Downstream\n\nThe displaced water overtopped the dam and moved down the valley as a destructive wave.\n\nLongarone and other settlements downstream were devastated within minutes: entire built areas were swept away, infrastructure was destroyed, and about 2,000 people were killed."
           }
         },
         {
